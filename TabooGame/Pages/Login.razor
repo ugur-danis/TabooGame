@@ -1,0 +1,66 @@
+﻿@inject NavigationManager Navigate
+@page "/"
+@page "/Login"
+
+<link rel="stylesheet" href="css/login.css" />
+
+<div id="login">
+
+    <div id="login-inputs">
+        <input type="text" id="player-name" placeholder="Player Name" @bind="player.Name">
+        <input type="text" id="lobby-name" placeholder="Lobby Name" @bind="player.LobbyName">
+    </div>
+
+    <div id="login-btns">
+        <button id="join-lobby" @onclick="JoinLobby">Join Lobby</button>
+        <button id="create-lobby" @onclick="CreateLobby">Create Lobby</button>
+    </div>
+
+    @if (error)
+    {
+        <div id="login-error">
+            <ul>
+                <li>@errorText</li>
+            </ul>
+        </div>
+    }
+</div>
+
+@code{
+    private Player player = new Player("", "");
+
+    private bool error = false;
+    private string errorText = "";
+
+
+    private bool CheckError()
+    {
+        if (player.Name.Length <= 0)
+        {
+            errorText = "Player name cannot be blank !";
+        }
+        else if (player.LobbyName.Length <= 0)
+        {
+            errorText = "Lobby Name cannot be blank !";
+        }
+        else errorText = "";
+
+        if (errorText.Length > 0) { error = true; return true; }
+        else { error = false; return false; }
+    }
+
+    private void JoinLobby()
+    {
+        if (!CheckError())
+            Navigate.NavigateTo("Lobby");
+    }
+
+    private void CreateLobby()
+    {
+        if (!CheckError())
+        {
+            player.IsAdmin = true;
+            Navigate.NavigateTo("Lobby");
+        }
+    }
+}

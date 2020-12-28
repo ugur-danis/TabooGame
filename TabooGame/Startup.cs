@@ -9,6 +9,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using TabooGame.Hubs;
 
 namespace TabooGame
 {
@@ -47,6 +48,7 @@ namespace TabooGame
             {
                 endpoints.MapBlazorHub();
                 endpoints.MapFallbackToPage("/_Host");
+                endpoints.MapHub<GameHub>(GameHub.url);
             });
         }
     }

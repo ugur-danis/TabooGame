@@ -1,4 +1,4 @@
-﻿@inject NavigationManager Navigate
+﻿@inject NavigationManager navigationManager
 @page "/"
 @page "/Login"
 
@@ -52,7 +52,7 @@
     private void JoinLobby()
     {
         if (!CheckError())
-            Navigate.NavigateTo("Lobby");
+            navigationManager.NavigateTo("Lobby");
     }
 
     private void CreateLobby()
@@ -60,7 +60,7 @@
         if (!CheckError())
         {
             player.IsAdmin = true;
-            Navigate.NavigateTo("Lobby");
+            navigationManager.NavigateTo("Lobby");
         }
     }
 }

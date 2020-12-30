@@ -15,11 +15,14 @@ namespace TabooGame.Hubs
             await Clients.Caller.SendAsync("GetPlayerID", Context.ConnectionId);
         }
 
+        public void JoinLobby(Player player)
         {
-            await Groups.AddToGroupAsync(player.ID, player.LobbyName);
+            if (GameDatabase.GetPlayers().Count == 0) player.IsAdmin = true;
+            GameDatabase.AddPlayer(player);
+            Groups.AddToGroupAsync(player.ID, lobbyName);
+            Clients.Group(lobbyName).SendAsync("JoinLobby");
         }
 
-        public async Task JoinLobby(Player player)
         {
             await Groups.AddToGroupAsync(player.ID, player.LobbyName);
             await Clients.OthersInGroup(player.LobbyName).SendAsync($"{player.Name} is join the lobby.");

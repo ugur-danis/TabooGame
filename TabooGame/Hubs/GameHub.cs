@@ -8,6 +8,7 @@ namespace TabooGame.Hubs
     public class GameHub : Hub
     {
         public const string url = "/gameHub";
+        private const string lobbyName = "MainLobby";
 
         public void PlayerLogin(Player player)
         {

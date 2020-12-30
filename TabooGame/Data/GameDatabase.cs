@@ -5,6 +5,6 @@ namespace TabooGame.Data
 {
     public static class GameDatabase
     {
-        public static List<Player> players = new List<Player>();
+        private static List<Player> Players = new List<Player>();
     }
 }

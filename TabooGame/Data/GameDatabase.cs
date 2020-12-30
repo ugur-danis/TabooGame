@@ -22,5 +22,9 @@ namespace TabooGame.Data
         {
             Players.Add(player);
         }
+        public static void RemovePlayer(Player player)
+        {
+            Players.Remove(player);
+        }
     }
 }

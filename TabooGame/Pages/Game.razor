@@ -110,7 +110,52 @@ else if (!isGameStart)
 @* GAME *@
 else if (isLogin)
 {
-    <div>Game</div>
+    <div class="container">
+        <div id="game">
+            <div class="scoreboard">
+                <span class="scoreboard-title">Scoreboard</span>
+                <div id="scores">
+                    <span>Team 1:</span>
+                    <span>10</span>
+                    <span>VS</span>
+                    <span>Team 2: </span>
+                    <span>5</span>
+                </div>
+                <div class="number-of-win">
+                    <span>Number of win:</span>
+                    <span id="win-number">50</span>
+                </div>
+            </div>
+            <div id="word-card">
+                <div class="word-card-header">
+                    <span id="word">WORD</span>
+                    <span id="counter">59</span>
+                </div>
+                <div class="word-card-boady">
+                    <ul>
+                        <li>FORBIDDEN WORD</li>
+                        <li>FORBIDDEN WORD</li>
+                        <li>FORBIDDEN WORD</li>
+                        <li>FORBIDDEN WORD</li>
+                        <li>FORBIDDEN WORD</li>
+                    </ul>
+                </div>
+            </div>
+            <div id="word-controller">
+                <button class="word-controller-btn" id="true">
+                    <i class="fas fa-check"></i>
+                </button>
+                <button class="word-controller-btn" id="taboo">
+                    <i class="fas fa-times"></i>
+                    <span>3</span>
+                </button>
+                <button class="word-controller-btn" id="pass">
+                    <i class="fas fa-arrow-right"></i>
+                    <span>3</span>
+                </button>
+            </div>
+        </div>
+    </div>
 }
 
 

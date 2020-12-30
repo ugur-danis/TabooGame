@@ -1,16 +1,13 @@
-﻿namespace TabooGame.Models
+﻿using static TabooGame.Data.GameDatabase;
+
+namespace TabooGame.Models
 {
     public class Player
     {
         public string ID { get; set; }
         public string Name { get; set; }
-        public string LobbyName { get; set; }
         public bool IsAdmin { get; set; }
-
-        public Player(string name, string lobbyName)
-        {
-            Name = name;
-            LobbyName = lobbyName;
-        }
+        public Teams Team { get; set; }
+        public bool IsReady { get; set; }
     }
 }

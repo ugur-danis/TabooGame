@@ -9,6 +9,8 @@ namespace TabooGame.Data
         private static List<Player> Players = new List<Player>();
         private static List<Player> Team1 = new List<Player>();
         private static List<Player> Team2 = new List<Player>();
+
+
         public static Player GetPlayer(string id)
         {
             return Players.Where(x => x.ID == id).FirstOrDefault();
@@ -18,18 +20,22 @@ namespace TabooGame.Data
         {
             return Players;
         }
+
         public static void AddPlayer(Player player)
         {
             Players.Add(player);
         }
+
         public static void RemovePlayer(Player player)
         {
             Players.Remove(player);
         }
+
         public static List<Player> GetTeam(Teams team)
         {
             return team == Teams.Team1 ? Team1 : Team2;
         }
+
         public static void AddTeam(Player player)
         {
             if (player.Team == Teams.Team1)
@@ -43,6 +49,7 @@ namespace TabooGame.Data
                 RemoveTeam(Teams.Team1, player);
             }
         }
+
         public static void RemoveTeam(Teams team, Player player)
         {
             Player _player = GetTeam(team).Find(x => x.ID == player.ID);
@@ -54,6 +61,7 @@ namespace TabooGame.Data
                 else Team2.RemoveAll(x => x.ID == player.ID);
             }
         }
+
         public static bool PlayersIsReady()
         {
             List<Player> readyPlayers = Players.Where(x => x.IsReady == true).ToList();

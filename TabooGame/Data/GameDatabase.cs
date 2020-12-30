@@ -26,5 +26,9 @@ namespace TabooGame.Data
         {
             Players.Remove(player);
         }
+        public static List<Player> GetTeam(Teams team)
+        {
+            return team == Teams.Team1 ? Team1 : Team2;
+        }
     }
 }

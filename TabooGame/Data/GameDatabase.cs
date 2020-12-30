@@ -30,5 +30,18 @@ namespace TabooGame.Data
         {
             return team == Teams.Team1 ? Team1 : Team2;
         }
+        public static void AddTeam(Player player)
+        {
+            if (player.Team == Teams.Team1)
+            {
+                Team1.Add(player);
+                RemoveTeam(Teams.Team2, player);
+            }
+            else if (player.Team == Teams.Team2)
+            {
+                Team2.Add(player);
+                RemoveTeam(Teams.Team1, player);
+            }
+        }
     }
 }

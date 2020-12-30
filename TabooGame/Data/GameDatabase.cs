@@ -13,5 +13,10 @@ namespace TabooGame.Data
         {
             return Players.Where(x => x.ID == id).FirstOrDefault();
         }
+
+        public static List<Player> GetPlayers()
+        {
+            return Players;
+        }
     }
 }

@@ -23,9 +23,11 @@ namespace TabooGame.Hubs
             Clients.Group(lobbyName).SendAsync("JoinLobby");
         }
 
+        public void JoinTeam(Player player)
         {
-            await Groups.AddToGroupAsync(player.ID, player.LobbyName);
-            await Clients.OthersInGroup(player.LobbyName).SendAsync($"{player.Name} is join the lobby.");
+            GameDatabase.AddTeam(player);
+            Clients.Group(lobbyName).SendAsync("JoinTeam");
+        }
         }
     }
 }

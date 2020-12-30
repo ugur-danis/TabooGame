@@ -54,5 +54,11 @@ namespace TabooGame.Data
                 else Team2.RemoveAll(x => x.ID == player.ID);
             }
         }
+        public static bool PlayersIsReady()
+        {
+            List<Player> readyPlayers = Players.Where(x => x.IsReady == true).ToList();
+            if (readyPlayers.Count != Players.Count) return false;
+            return true;
+        }
     }
 }

@@ -9,5 +9,9 @@ namespace TabooGame.Data
         private static List<Player> Players = new List<Player>();
         private static List<Player> Team1 = new List<Player>();
         private static List<Player> Team2 = new List<Player>();
+        public static Player GetPlayer(string id)
+        {
+            return Players.Where(x => x.ID == id).FirstOrDefault();
+        }
     }
 }

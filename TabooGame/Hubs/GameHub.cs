@@ -15,7 +15,6 @@ namespace TabooGame.Hubs
             await Clients.Caller.SendAsync("GetPlayerID", Context.ConnectionId);
         }
 
-        public async Task CreateLobby(Player player)
         {
             await Groups.AddToGroupAsync(player.ID, player.LobbyName);
         }

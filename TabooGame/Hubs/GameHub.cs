@@ -10,7 +10,6 @@ namespace TabooGame.Hubs
         public const string url = "/gameHub";
         private const string lobbyName = "MainLobby";
 
-        public void PlayerLogin(Player player)
         {
             player.ID = Context.ConnectionId;
             GameDatabase.players.Add(player);

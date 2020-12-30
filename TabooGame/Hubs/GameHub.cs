@@ -28,6 +28,13 @@ namespace TabooGame.Hubs
             GameDatabase.AddTeam(player);
             Clients.Group(lobbyName).SendAsync("JoinTeam");
         }
+
+        public void GameStart()
+        {
+            if (GameDatabase.PlayersIsReady())
+            {
+                Clients.Group(lobbyName).SendAsync("GameStart");
+            }
         }
     }
 }

@@ -1,0 +1,192 @@
+﻿@inject NavigationManager navigationManager
+@page "/"
+@page "/Game"
+@* LOGIN *@
+@if (!isLogin)
+{
+    <div id="login">
+
+        <div id="login-inputs">
+            <input type="text" id="player-name" placeholder="Player Name" @bind="_player.Name">
+        </div>
+
+        <div id="login-btns">
+            <button id="join-lobby" @onclick="JoinLobby">Join Lobby</button>
+        </div>
+    </div>
+}
+
+
+@* LOBBY *@
+else if (!isGameStart)
+{
+    <div class="container">
+        <div id="game-controller">
+            @if (!_player.IsReady && _player.Team != Teams.None)
+            {
+                <button class="start-game" @onclick="Ready">Ready</button>
+            }
+            else if (_player.Team != Teams.None)
+            {
+                <button class="start-game" @onclick="Unready">Unready</button>
+            }
+        </div>
+        <div id="teams">
+            <div id="team1-list">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Team 1</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @if (GameDatabase.GetTeam(Teams.Team1).Count > 0)
+                            @foreach (var player in GameDatabase.GetTeam(Teams.Team1))
+                            {
+                                <tr>
+                                    <td>@player.Name</td>
+                                </tr>
+                            }
+                        @if (!isJoinTeam1)
+                        {
+                            <tr>
+                                <td>
+                                    <button class="join-team-btn" @onclick="(() => JoinTeam(Teams.Team1))">Join</button>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+            <div id="players-list">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Players List</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @if (GameDatabase.GetPlayers().Count > 0)
+                            @foreach (var player in GameDatabase.GetPlayers())
+                            {
+                                <tr>
+                                    <td>@player.Name</td>
+                                </tr>
+                            }
+                    </tbody>
+                </table>
+            </div>
+            <div id="team2-list">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Team 2</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @if (GameDatabase.GetTeam(Teams.Team2).Count > 0)
+                            @foreach (var player in GameDatabase.GetTeam(Teams.Team2))
+                            {
+                                <tr>
+                                    <td>@player.Name</td>
+                                </tr>
+                            }
+                        @if (!isJoinTeam2)
+                        {
+                            <tr>
+                                <td>
+                                    <button class="join-team-btn" @onclick="(() => JoinTeam(Teams.Team2))">Join</button>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+}
+
+
+@* GAME *@
+else if (isLogin)
+{
+    <div>Game</div>
+}
+
+
+@code{
+    #region Variables
+    private string _hubUrl;
+    private HubConnection _hubConnection;
+
+    private Player _player = new Player();
+
+    private bool isLogin = false;
+    private bool isGameStart = false;
+    private bool isJoinTeam1 = false;
+    private bool isJoinTeam2 = false;
+    #endregion
+
+    #region Initialize
+    protected override async Task OnInitializedAsync()
+    {
+        string baseUrl = navigationManager.BaseUri;
+
+        _hubUrl = baseUrl.TrimEnd('/') + GameHub.url;
+
+        _hubConnection = new HubConnectionBuilder()
+            .WithUrl(_hubUrl)
+            .Build();
+
+
+        _hubConnection.On("GetPlayerID", (string id) => _player.ID = id);
+        _hubConnection.On("JoinLobby", () =>
+        {
+            _player = GameDatabase.GetPlayer(_player.ID);
+            isLogin = true;
+            StateHasChanged();
+        });
+
+        _hubConnection.On("JoinTeam", () => { StateHasChanged(); });
+        _hubConnection.On("GameStart", () => { isGameStart = true; StateHasChanged(); });
+
+        await _hubConnection.StartAsync();
+    }
+    #endregion
+
+    #region LOGIN
+    private void JoinLobby()
+    {
+        _hubConnection.InvokeAsync("JoinLobby", _player);
+    }
+    #endregion
+
+    #region LOBBY
+    private void JoinTeam(Teams team)
+    {
+        if (team == Teams.Team1) { isJoinTeam1 = true; isJoinTeam2 = false; }
+        else if (team == Teams.Team2) { isJoinTeam2 = true; isJoinTeam1 = false; }
+
+        _player.Team = team;
+        _hubConnection.InvokeAsync("JoinTeam", _player);
+    }
+
+    private void Ready()
+    {
+        _player.IsReady = true;
+        _hubConnection.InvokeAsync("GameStart");
+    }
+
+    private void Unready()
+    {
+        _player.IsReady = false;
+    }
+    #endregion
+
+    #region GAME
+    #endregion
+}
+
+
+
+

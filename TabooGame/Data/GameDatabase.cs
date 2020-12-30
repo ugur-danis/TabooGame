@@ -43,5 +43,16 @@ namespace TabooGame.Data
                 RemoveTeam(Teams.Team1, player);
             }
         }
+        public static void RemoveTeam(Teams team, Player player)
+        {
+            Player _player = GetTeam(team).Find(x => x.ID == player.ID);
+
+            if (_player != null)
+            {
+                if (team == Teams.Team1)
+                    Team1.RemoveAll(x => x.ID == player.ID);
+                else Team2.RemoveAll(x => x.ID == player.ID);
+            }
+        }
     }
 }

@@ -10,9 +10,9 @@ namespace TabooGame.Hubs
         public const string url = "/gameHub";
         private const string lobbyName = "MainLobby";
 
+        public override async Task OnConnectedAsync()
         {
-            player.ID = Context.ConnectionId;
-            GameDatabase.players.Add(player);
+            await Clients.Caller.SendAsync("GetPlayerID", Context.ConnectionId);
         }
 
         public async Task CreateLobby(Player player)

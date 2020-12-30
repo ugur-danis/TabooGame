@@ -18,5 +18,9 @@ namespace TabooGame.Data
         {
             return Players;
         }
+        public static void AddPlayer(Player player)
+        {
+            Players.Add(player);
+        }
     }
 }

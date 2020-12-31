@@ -15,7 +15,8 @@ namespace TabooGame.Data
                 ForbiddenWords = new List<string>
                 {
                     "Sebze","Meyve","Yeşil","Hıyar","Tuz"
-                }
+                },
+                Asked = false
             },
             new WordCard
             {
@@ -24,7 +25,8 @@ namespace TabooGame.Data
                 ForbiddenWords = new List<string>
                 {
                     "ASD 1","ASD 2","ASD 3","ASD 4","ASD 5"
-                }
+                },
+                Asked = false
             }
         };
 

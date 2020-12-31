@@ -8,6 +8,7 @@ namespace TabooGame.Data
     {
         private static List<Player> Players = new List<Player>();
         private static Game Game = new Game();
+        public static GameManager GameManager = new GameManager(Game);
 
         #region LOBBY
         public static Player GetPlayer(string id)

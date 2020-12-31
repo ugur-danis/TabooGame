@@ -4,21 +4,22 @@ namespace TabooGame.Models
 {
     public class Game
     {
-        public Team Team1 { get; set; }
-        public Team Team2 { get; set; }
+        public Team Team1 { get; set; } = new Team() { Players = new List<Player>() };
+        public Team Team2 { get; set; } = new Team() { Players = new List<Player>() };
         public int NumberOfWin { get; set; }
         public int Countdown { get; set; }
         public int RightToTaboo { get; set; }
         public int RightToPass { get; set; }
         public bool IsGameOver { get; set; }
         public bool IsRoundEnd { get; set; }
-        public Team CurrentPlayingTeam { get; set; }
+        public Team CurrentPlayingTeam { get; set; } = new Team() { Players = new List<Player>() };
         public Player CurrentSpeakerPlayer { get; set; }
-        public List<Player> CurrentListenerPlayers { get; set; }
-        public Team CurrentOpponentPlayers { get; set; }   // Gerekirse Teams enum yerine, Player listesi al
+        public List<Player> CurrentListenerPlayers { get; set; } = new List<Player>();
+        //public Team CurrentOpponentPlayers { get; set; } = new Team() { Players = new List<Player>() };
+        public Teams CurrentOpponentPlayers { get; set; }
         public Teams LastPlayedTeam { get; set; }
-        public List<Player> LastSpeakerPlayers { get; set; }
-        public List<WordCard> PastWordCards { get; set; }
+        public List<Player> LastSpeakerPlayers { get; set; } = new List<Player>();
+        public List<WordCard> PastWordCards { get; set; } = new List<WordCard>();
         public WordCard WordCard { get; set; }
     }
 }

@@ -2,7 +2,7 @@
 @page "/"
 @page "/Game"
 @* LOGIN *@
-@if (!isLogin)
+@if (!_isLogin)
 {
     <div id="login">
 
@@ -18,7 +18,7 @@
 
 
 @* LOBBY *@
-else if (!isGameStart)
+else if (!_isGameStart)
 {
     <div class="container">
         <div id="game-controller">
@@ -40,14 +40,14 @@ else if (!isGameStart)
                         </tr>
                     </thead>
                     <tbody>
-                        @if (GameDatabase.GetTeam(Teams.Team1).Count > 0)
-                            @foreach (var player in GameDatabase.GetTeam(Teams.Team1))
+                        @if (GameDatabase.GameManager.GetTeam(Teams.Team1).Players.Count > 0)
+                            @foreach (var player in GameDatabase.GameManager.GetTeam(Teams.Team1).Players)
                             {
                                 <tr>
                                     <td>@player.Name</td>
                                 </tr>
                             }
-                        @if (!isJoinTeam1)
+                        @if (!_isJoinTeam1)
                         {
                             <tr>
                                 <td>
@@ -84,14 +84,14 @@ else if (!isGameStart)
                         </tr>
                     </thead>
                     <tbody>
-                        @if (GameDatabase.GetTeam(Teams.Team2).Count > 0)
-                            @foreach (var player in GameDatabase.GetTeam(Teams.Team2))
+                        @if (GameDatabase.GameManager.GetTeam(Teams.Team2).Players.Count > 0)
+                            @foreach (var player in GameDatabase.GameManager.GetTeam(Teams.Team2).Players)
                             {
                                 <tr>
                                     <td>@player.Name</td>
                                 </tr>
                             }
-                        @if (!isJoinTeam2)
+                        @if (!_isJoinTeam2)
                         {
                             <tr>
                                 <td>
@@ -108,52 +108,61 @@ else if (!isGameStart)
 
 
 @* GAME *@
-else if (isLogin)
+else if (_isLogin)
 {
     <div class="container">
         <div id="game">
             <div class="scoreboard">
                 <span class="scoreboard-title">Scoreboard</span>
                 <div id="scores">
-                    <span>Team 1:</span>
-                    <span>10</span>
+                    <span>@GameDatabase.GameManager.Team1Name:</span>
+                    <span>@GameDatabase.GameManager.Team1Score</span>
                     <span>VS</span>
-                    <span>Team 2: </span>
-                    <span>5</span>
+                    <span>@GameDatabase.GameManager.Team2Name: </span>
+                    <span>@GameDatabase.GameManager.Team2Score</span>
                 </div>
                 <div class="number-of-win">
                     <span>Number of win:</span>
-                    <span id="win-number">50</span>
+                    <span id="win-number">@GameDatabase.GameManager.NumberOfWin</span>
                 </div>
             </div>
-            <div id="word-card">
-                <div class="word-card-header">
-                    <span id="word">WORD</span>
-                    <span id="counter">59</span>
-                </div>
-                <div class="word-card-boady">
-                    <ul>
-                        <li>FORBIDDEN WORD</li>
-                        <li>FORBIDDEN WORD</li>
-                        <li>FORBIDDEN WORD</li>
-                        <li>FORBIDDEN WORD</li>
-                        <li>FORBIDDEN WORD</li>
-                    </ul>
-                </div>
-            </div>
-            <div id="word-controller">
-                <button class="word-controller-btn" id="true">
-                    <i class="fas fa-check"></i>
-                </button>
-                <button class="word-controller-btn" id="taboo">
-                    <i class="fas fa-times"></i>
-                    <span>3</span>
-                </button>
-                <button class="word-controller-btn" id="pass">
-                    <i class="fas fa-arrow-right"></i>
-                    <span>3</span>
-                </button>
-            </div>
+            @if (!GameDatabase.GameManager.IsRounEnd)
+            {
+                @if (GameDatabase.GameManager.IsOpponentPlayer(_player) || GameDatabase.GameManager.IsSpeakerPlayer(_player))
+                {
+                    <div id="word-card">
+                        <div class="word-card-header">
+                            <span id="word">@GameDatabase.GameManager.WordCard.Word</span>
+                            <span id="counter">@_countdown</span>
+                        </div>
+                        <div class="word-card-boady">
+                            <ul>
+                                @foreach (var item in @GameDatabase.GameManager.WordCard.ForbiddenWords)
+                                {
+                                    <li>@item</li>
+                                }
+                            </ul>
+                        </div>
+                    </div>
+                }
+
+                @if (GameDatabase.GameManager.IsOpponentPlayer(_player))
+                {
+                    <div id="word-controller">
+                        <button class="word-controller-btn" id="true">
+                            <i class="fas fa-check"></i>
+                        </button>
+                        <button class="word-controller-btn" id="taboo">
+                            <i class="fas fa-times"></i>
+                            <span>@GameDatabase.GameManager.RightToTaboo</span>
+                        </button>
+                        <button class="word-controller-btn" id="pass">
+                            <i class="fas fa-arrow-right"></i>
+                            <span>@GameDatabase.GameManager.RightToPass</span>
+                        </button>
+                    </div>
+                }
+            }
         </div>
     </div>
 }
@@ -166,10 +175,12 @@ else if (isLogin)
 
     private Player _player = new Player();
 
-    private bool isLogin = false;
-    private bool isGameStart = false;
-    private bool isJoinTeam1 = false;
-    private bool isJoinTeam2 = false;
+    private bool _isLogin = false;
+    private bool _isGameStart = false;
+    private bool _isJoinTeam1 = false;
+    private bool _isJoinTeam2 = false;
+
+    private int _countdown = GameDatabase.GameManager.GetCountdown;
     #endregion
 
     #region Initialize
@@ -188,12 +199,13 @@ else if (isLogin)
         _hubConnection.On("JoinLobby", () =>
         {
             _player = GameDatabase.GetPlayer(_player.ID);
-            isLogin = true;
+            _isLogin = true;
             StateHasChanged();
         });
 
         _hubConnection.On("JoinTeam", () => { StateHasChanged(); });
-        _hubConnection.On("GameStart", () => { isGameStart = true; StateHasChanged(); });
+        _hubConnection.On("GameStart", () => { _isGameStart = true; StateHasChanged(); Countdowner(); });
+        _hubConnection.On("TimeEnd", () => { _isGameStart = false; StateHasChanged(); });
 
         await _hubConnection.StartAsync();
     }
@@ -209,8 +221,8 @@ else if (isLogin)
     #region LOBBY
     private void JoinTeam(Teams team)
     {
-        if (team == Teams.Team1) { isJoinTeam1 = true; isJoinTeam2 = false; }
-        else if (team == Teams.Team2) { isJoinTeam2 = true; isJoinTeam1 = false; }
+        if (team == Teams.Team1) { _isJoinTeam1 = true; _isJoinTeam2 = false; }
+        else if (team == Teams.Team2) { _isJoinTeam2 = true; _isJoinTeam1 = false; }
 
         _player.Team = team;
         _hubConnection.InvokeAsync("JoinTeam", _player);
@@ -229,6 +241,17 @@ else if (isLogin)
     #endregion
 
     #region GAME
+    private void Countdowner()
+    {
+        while (_countdown > 0)
+        {
+            System.Threading.Thread.Sleep(1000);
+            _countdown--;
+            StateHasChanged();
+        }
+
+        _hubConnection.InvokeAsync("TimeEnd");
+    }
     #endregion
 }
 

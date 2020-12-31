@@ -33,7 +33,19 @@ namespace TabooGame.Data
         public static WordCard GetRandomWordCard()
         {
             Random random = new Random();
-            return WordCards[random.Next(0, WordCards.Count)];
+
+            if (WordCards.Count == WordCards.Where(x => x.Asked).ToList().Count)
+                WordCards.ForEach(x => x.Asked = false);
+
+            int wordCardIndex = random.Next(0, WordCards.Count);
+
+            while (WordCards[wordCardIndex].Asked == true)
+            {
+                wordCardIndex = random.Next(0, WordCards.Count);
+            }
+
+            WordCards[wordCardIndex].Asked = true;
+            return WordCards[wordCardIndex];
         }
     }
 }

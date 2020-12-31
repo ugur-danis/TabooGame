@@ -1,6 +1,3 @@
-@import url("/css/style.css");
-@import url("/Lobby/style.css");
-
 #game {
   display: flex;
   flex-direction: column;

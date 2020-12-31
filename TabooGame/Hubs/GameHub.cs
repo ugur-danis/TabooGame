@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System.Threading;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.SignalR;
 using TabooGame.Data;
 using TabooGame.Models;
@@ -10,6 +11,7 @@ namespace TabooGame.Hubs
         public const string url = "/gameHub";
         private const string lobbyName = "MainLobby";
 
+        #region LOBBY
         public override async Task OnConnectedAsync()
         {
             await Clients.Caller.SendAsync("GetPlayerID", Context.ConnectionId);
@@ -25,16 +27,25 @@ namespace TabooGame.Hubs
 
         public void JoinTeam(Player player)
         {
-            GameDatabase.AddTeam(player);
+            GameDatabase.GameManager.AddTeam(player);
             Clients.Group(lobbyName).SendAsync("JoinTeam");
         }
 
         public void GameStart()
         {
-            if (GameDatabase.PlayersIsReady())
+            if (GameDatabase.GameManager.PlayersIsReady())
             {
+                GameDatabase.GameManager.GameStart();
                 Clients.Group(lobbyName).SendAsync("GameStart");
             }
         }
+        #endregion
+
+        #region GAME
+        public void TimeEnd()
+        {
+            Clients.Group(lobbyName).SendAsync("TimeEnd");
+        }
+        #endregion
     }
 }

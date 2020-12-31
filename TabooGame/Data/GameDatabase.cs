@@ -10,7 +10,7 @@ namespace TabooGame.Data
         private static Game Game = new Game();
         public static GameManager GameManager = new GameManager(Game);
 
-        #region LOBBY
+        #region Player Methods
         public static Player GetPlayer(string id)
         {
             return Players.Where(x => x.ID == id).FirstOrDefault();

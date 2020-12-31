@@ -6,7 +6,7 @@ namespace TabooGame.Data
 {
     public static class WordCardDataBase
     {
-        public static List<WordCard> WordCards = new List<WordCard>
+        private static List<WordCard> WordCards = new List<WordCard>
         {
             new WordCard
             {

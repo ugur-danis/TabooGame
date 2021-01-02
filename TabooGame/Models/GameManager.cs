@@ -86,12 +86,19 @@ namespace TabooGame.Models
 
         public void GameStart()
         {
+            _game.Team1.Players.ForEach(x => x.IsNextRoundReady = false);
+            _game.Team2.Players.ForEach(x => x.IsNextRoundReady = false);
+
             _game.Counter = 10;
+            _game.RightToPass = 3;
+            _game.RightToTaboo = 3;
+
             SetWordCard();
             SetCurrentPlayingTeam();
             SetCurrentSpeakerPlayer();
             SetCurrentListenerPlayers();
             SetCurrentOpponentPlayers();
+            _game.IsRoundEnd = false;
         }
 
         public bool IsOpponentPlayer(Player player) => player.Team == _game.CurrentOpponentPlayers;

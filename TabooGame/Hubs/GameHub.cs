@@ -48,6 +48,7 @@ namespace TabooGame.Hubs
         }
         public void TrueButton() => Clients.OthersInGroup(lobbyName).SendAsync("Refresh");
         public void TabooButton() => Clients.OthersInGroup(lobbyName).SendAsync("Refresh");
+        public void PassButton() => Clients.OthersInGroup(lobbyName).SendAsync("Refresh");
         #endregion
     }
 }

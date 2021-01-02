@@ -62,7 +62,7 @@ namespace TabooGame.Models
         public string Team2Name => _game.Team2.Name;
         public int Team1Score => _game.Team1.Score;
         public int Team2Score => _game.Team2.Score;
-        public int GetCountdown => _game.Countdown;
+        public int GetCounter => _game.Counter;
         public int NumberOfWin => _game.NumberOfWin;
         public bool IsGameOver => _game.IsGameOver;
         public bool IsRounEnd => _game.IsRoundEnd;

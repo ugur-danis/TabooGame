@@ -94,8 +94,10 @@
   margin-top: 30px;
   text-align: center;
 }
-
-#round-end div {
+#round-end span{
+    display: block;
+}
+    #round-end div {
   margin-bottom: 20px;
 }
 

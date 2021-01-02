@@ -103,6 +103,16 @@ namespace TabooGame.Models
 
         public bool IsOpponentPlayer(Player player) => player.Team == _game.CurrentOpponentPlayers;
         public bool IsSpeakerPlayer(Player player) => player.ID == _game.CurrentSpeakerPlayer.ID;
+        public void SetIsRoundEnd(bool end) => _game.IsRoundEnd = end;
+
+        public bool PlayersIsNextRoundReady()
+        {
+            List<Player> players = GameDatabase.GetPlayers();
+            List<Player> readyPlayers = players.Where(x => x.IsNextRoundReady == true).ToList();
+
+            if (readyPlayers.Count != players.Count) return false;
+            return true;
+        }
 
         public void SetWordCard() => _game.WordCard = WordCardDataBase.GetRandomWordCard();
 

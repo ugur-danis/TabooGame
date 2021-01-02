@@ -7,7 +7,7 @@ namespace TabooGame.Models
         public Team Team1 { get; set; } = new Team() { Players = new List<Player>() };
         public Team Team2 { get; set; } = new Team() { Players = new List<Player>() };
         public int NumberOfWin { get; set; }
-        public int Countdown { get; set; }
+        public int Counter { get; set; }
         public int RightToTaboo { get; set; }
         public int RightToPass { get; set; }
         public bool IsGameOver { get; set; }

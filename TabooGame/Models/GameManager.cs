@@ -162,6 +162,7 @@ namespace TabooGame.Models
             _game.CurrentPlayingTeam.Score--;
             SetWordCard();
         }
+        public void PassButton() => SetWordCard();
         #endregion
     }
 }

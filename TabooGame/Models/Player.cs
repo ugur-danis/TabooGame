@@ -9,5 +9,6 @@ namespace TabooGame.Models
         public bool IsAdmin { get; set; }
         public Teams Team { get; set; }
         public bool IsLobbyReady { get; set; }
+        public bool IsNextRoundReady { get; set; }
     }
 }

@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading;
 using TabooGame.Data;
 
 namespace TabooGame.Models
@@ -147,21 +146,24 @@ namespace TabooGame.Models
             }
         }
 
-        public void SetCurrentListenerPlayers()
-        {
+        public void SetCurrentListenerPlayers() =>
             _game.CurrentListenerPlayers = _game.CurrentPlayingTeam.Players.Where(x => x.ID != _game.CurrentSpeakerPlayer.ID).ToList();
+
+        public void SetCurrentOpponentPlayers() =>
+            _game.CurrentOpponentPlayers = _game.CurrentPlayingTeam == _game.Team1 ? Teams.Team2 : Teams.Team1;
+
         public void TrueButton()
         {
             _game.CurrentPlayingTeam.Score++;
             SetWordCard();
         }
 
-        public void SetCurrentOpponentPlayers()
         public void TabooButton()
         {
             _game.CurrentPlayingTeam.Score--;
             SetWordCard();
         }
+
         public void PassButton() => SetWordCard();
         #endregion
     }

@@ -15,7 +15,6 @@ namespace TabooGame.Models
         public Team CurrentPlayingTeam { get; set; } = new Team() { Players = new List<Player>() };
         public Player CurrentSpeakerPlayer { get; set; }
         public List<Player> CurrentListenerPlayers { get; set; } = new List<Player>();
-        //public Team CurrentOpponentPlayers { get; set; } = new Team() { Players = new List<Player>() };
         public Teams CurrentOpponentPlayers { get; set; }
         public Teams LastPlayedTeam { get; set; }
         public List<Player> LastSpeakerPlayers { get; set; } = new List<Player>();

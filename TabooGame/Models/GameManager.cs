@@ -150,6 +150,10 @@ namespace TabooGame.Models
         public void SetCurrentListenerPlayers()
         {
             _game.CurrentListenerPlayers = _game.CurrentPlayingTeam.Players.Where(x => x.ID != _game.CurrentSpeakerPlayer.ID).ToList();
+        public void TrueButton()
+        {
+            _game.CurrentPlayingTeam.Score++;
+            SetWordCard();
         }
 
         public void SetCurrentOpponentPlayers()

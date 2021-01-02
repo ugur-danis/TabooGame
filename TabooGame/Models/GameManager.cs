@@ -78,7 +78,7 @@ namespace TabooGame.Models
             _game.Team2.Name = "Team 2";
             _game.Team1.Score = 0;
             _game.Team2.Score = 0;
-            _game.Countdown = 30;
+            _game.Counter = 10;
             _game.NumberOfWin = 10;
             _game.RightToPass = 3;
             _game.RightToTaboo = 3;
@@ -86,6 +86,7 @@ namespace TabooGame.Models
 
         public void GameStart()
         {
+            _game.Counter = 10;
             SetWordCard();
             SetCurrentPlayingTeam();
             SetCurrentSpeakerPlayer();

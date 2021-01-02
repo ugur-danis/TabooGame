@@ -8,6 +8,6 @@ namespace TabooGame.Models
         public string Name { get; set; }
         public bool IsAdmin { get; set; }
         public Teams Team { get; set; }
-        public bool IsReady { get; set; }
+        public bool IsLobbyReady { get; set; }
     }
 }

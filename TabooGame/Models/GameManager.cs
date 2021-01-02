@@ -47,10 +47,10 @@ namespace TabooGame.Models
             }
         }
 
-        public bool PlayersIsReady()
+        public bool PlayersIsLobbyReady()
         {
             List<Player> players = GameDatabase.GetPlayers();
-            List<Player> readyPlayers = players.Where(x => x.IsReady == true).ToList();
+            List<Player> readyPlayers = players.Where(x => x.IsLobbyReady == true).ToList();
 
             if (readyPlayers.Count != players.Count) return false;
             return true;

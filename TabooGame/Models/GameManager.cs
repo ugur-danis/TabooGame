@@ -157,9 +157,10 @@ namespace TabooGame.Models
         }
 
         public void SetCurrentOpponentPlayers()
+        public void TabooButton()
         {
-            _game.CurrentOpponentPlayers = _game.CurrentPlayingTeam == _game.Team1 ? Teams.Team2
-                : Teams.Team1;
+            _game.CurrentPlayingTeam.Score--;
+            SetWordCard();
         }
         #endregion
     }

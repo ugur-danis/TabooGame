@@ -69,6 +69,7 @@ namespace TabooGame.Models
         public int RightToPass => _game.RightToPass;
         public int RightToTaboo => _game.RightToTaboo;
         public WordCard WordCard => _game.WordCard;
+        public Player CurrentSpeakerPlayer => _game.CurrentSpeakerPlayer;
 
         public void GameConfiguration()
         {

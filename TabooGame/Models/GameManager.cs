@@ -19,7 +19,6 @@ namespace TabooGame.Models
         {
             return team == Teams.Team1 ? _game.Team1 : _game.Team2;
         }
-
         public void AddTeam(Player player)
         {
             if (player.Team == Teams.Team1)
@@ -33,7 +32,6 @@ namespace TabooGame.Models
                 RemoveTeam(Teams.Team1, player);
             }
         }
-
         public void RemoveTeam(Teams team, Player player)
         {
             Player _player = GetTeam(team).Players.Find(x => x.ID == player.ID);
@@ -45,7 +43,6 @@ namespace TabooGame.Models
                 else _game.Team2.Players.RemoveAll(x => x.ID == player.ID);
             }
         }
-
         public bool PlayersIsLobbyReady()
         {
             List<Player> players = GameDatabase.GetPlayers();
@@ -110,9 +107,7 @@ namespace TabooGame.Models
             if (readyPlayers.Count != players.Count) return false;
             return true;
         }
-
         public void SetWordCard() => _game.WordCard = WordCardDataBase.GetRandomWordCard();
-
         public void SetCurrentPlayingTeam()
         {
             if (_game.LastPlayedTeam == Teams.Team1) _game.CurrentPlayingTeam = _game.Team2;
@@ -121,7 +116,6 @@ namespace TabooGame.Models
 
             _game.LastPlayedTeam = _game.CurrentPlayingTeam == _game.Team1 ? Teams.Team1 : Teams.Team2;
         }
-
         public void SetCurrentSpeakerPlayer()
         {
             Random random = new Random();
@@ -129,39 +123,43 @@ namespace TabooGame.Models
             if (_game.CurrentPlayingTeam == _game.Team1)
             {
                 if (_game.LastSpeakerPlayers.Where(x => x.Team == Teams.Team1).ToList().Count == _game.Team1.Players.Count)
-                    _game.LastSpeakerPlayers.Where(x => x.Team == Teams.Team1).ToList().Clear();
+                    _game.LastSpeakerPlayers.RemoveAll(x => x.Team == Teams.Team1);
 
-                _game.CurrentSpeakerPlayer = _game.Team1.Players[random.Next(0, _game.Team1.Players.Count)];
-                _game.LastSpeakerPlayers.Add(_game.CurrentSpeakerPlayer);
+                while (true)
+                {
+                    _game.CurrentSpeakerPlayer = _game.Team1.Players[random.Next(0, _game.Team1.Players.Count)];
+                    bool isFind = _game.LastSpeakerPlayers.Any(x => x.ID == _game.CurrentSpeakerPlayer.ID);
+                    if (!isFind) break;
+                }
             }
             else if (_game.CurrentPlayingTeam == _game.Team2)
             {
                 if (_game.LastSpeakerPlayers.Where(x => x.Team == Teams.Team2).ToList().Count == _game.Team2.Players.Count)
-                    _game.LastSpeakerPlayers.Where(x => x.Team == Teams.Team2).ToList().Clear();
+                    _game.LastSpeakerPlayers.RemoveAll(x => x.Team == Teams.Team2);
 
-                _game.CurrentSpeakerPlayer = _game.Team2.Players[random.Next(0, _game.Team2.Players.Count)];
-                _game.LastSpeakerPlayers.Add(_game.CurrentSpeakerPlayer);
+                while (true)
+                {
+                    _game.CurrentSpeakerPlayer = _game.Team2.Players[random.Next(0, _game.Team2.Players.Count)];
+                    bool isFind = _game.LastSpeakerPlayers.Any(x => x.ID == _game.CurrentSpeakerPlayer.ID);
+                    if (!isFind) break;
+                }
             }
+            _game.LastSpeakerPlayers.Add(_game.CurrentSpeakerPlayer);
         }
-
         public void SetCurrentListenerPlayers() =>
             _game.CurrentListenerPlayers = _game.CurrentPlayingTeam.Players.Where(x => x.ID != _game.CurrentSpeakerPlayer.ID).ToList();
-
         public void SetCurrentOpponentPlayers() =>
             _game.CurrentOpponentPlayers = _game.CurrentPlayingTeam == _game.Team1 ? Teams.Team2 : Teams.Team1;
-
         public void TrueButton()
         {
             _game.CurrentPlayingTeam.Score++;
             SetWordCard();
         }
-
         public void TabooButton()
         {
             _game.CurrentPlayingTeam.Score--;
             SetWordCard();
         }
-
         public void PassButton() => SetWordCard();
         #endregion
     }

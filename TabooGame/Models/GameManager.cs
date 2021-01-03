@@ -82,8 +82,7 @@ namespace TabooGame.Models
             _game.RightToPass = 3;
             _game.RightToTaboo = 3;
         }
-
-        public void GameStart()
+        public void GenerateGame()
         {
             _game.IsRoundStart = false;
             _game.Team1.Players.ForEach(x => x.IsNextRoundReady = false);

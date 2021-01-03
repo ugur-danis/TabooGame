@@ -64,7 +64,7 @@ namespace TabooGame.Models
         public int GetCounter => _game.Counter;
         public int NumberOfWin => _game.NumberOfWin;
         public bool IsGameOver => _game.IsGameOver;
-        public bool IsRounEnd => _game.IsRoundEnd;
+        public bool IsRoundStart => _game.IsRoundStart;
         public int RightToPass => _game.RightToPass;
         public int RightToTaboo => _game.RightToTaboo;
         public WordCard WordCard => _game.WordCard;
@@ -85,6 +85,7 @@ namespace TabooGame.Models
 
         public void GameStart()
         {
+            _game.IsRoundStart = false;
             _game.Team1.Players.ForEach(x => x.IsNextRoundReady = false);
             _game.Team2.Players.ForEach(x => x.IsNextRoundReady = false);
 
@@ -97,13 +98,11 @@ namespace TabooGame.Models
             SetCurrentSpeakerPlayer();
             SetCurrentListenerPlayers();
             SetCurrentOpponentPlayers();
-            _game.IsRoundEnd = false;
         }
 
         public bool IsOpponentPlayer(Player player) => player.Team == _game.CurrentOpponentPlayers;
         public bool IsSpeakerPlayer(Player player) => player.ID == _game.CurrentSpeakerPlayer.ID;
-        public void SetIsRoundEnd(bool end) => _game.IsRoundEnd = end;
-
+        public void SetIsRoundStart(bool isStart) => _game.IsRoundStart = isStart;
         public bool PlayersIsNextRoundReady()
         {
             List<Player> players = GameDatabase.GetPlayers();

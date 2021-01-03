@@ -11,7 +11,7 @@ namespace TabooGame.Models
         public int RightToTaboo { get; set; }
         public int RightToPass { get; set; }
         public bool IsGameOver { get; set; }
-        public bool IsRoundEnd { get; set; }
+        public bool IsRoundStart { get; set; }
         public Team CurrentPlayingTeam { get; set; } = new Team() { Players = new List<Player>() };
         public Player CurrentSpeakerPlayer { get; set; }
         public List<Player> CurrentListenerPlayers { get; set; } = new List<Player>();

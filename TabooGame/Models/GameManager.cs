@@ -51,6 +51,8 @@ namespace TabooGame.Models
             if (readyPlayers.Count != players.Count) return false;
             return true;
         }
+        public void SetPlayersIsLobbyReady(bool isReady) =>
+            GameDatabase.GetPlayers().ForEach(x => x.IsLobbyReady = isReady);
         #endregion
 
         #region GAME
@@ -74,7 +76,7 @@ namespace TabooGame.Models
             _game.Team2.Name = "Team 2";
             _game.Team1.Score = 0;
             _game.Team2.Score = 0;
-            _game.Counter = 10;
+            _game.Counter = 5;
             _game.NumberOfWin = 10;
             _game.RightToPass = 3;
             _game.RightToTaboo = 3;

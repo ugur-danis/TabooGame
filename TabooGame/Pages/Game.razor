@@ -1,343 +1,346 @@
 ﻿@inject NavigationManager navigationManager
 @page "/"
 @page "/Game"
-    @* LOGIN *@
-    @if (!_isLogin)
-    {
-        <div id="login">
+@* LOGIN *@
+@if (!_isLogin)
+{
+    <div id="login">
 
-            <div id="login-inputs">
-                <input type="text" id="player-name" placeholder="Player Name" @bind="_player.Name">
-            </div>
-
-            <div id="login-btns">
-                <button id="join-lobby" @onclick="JoinLobby">Join Lobby</button>
-            </div>
+        <div id="login-inputs">
+            <input type="text" id="player-name" placeholder="Player Name" @bind="_player.Name">
         </div>
-    }
+
+        <div id="login-btns">
+            <button id="join-lobby" @onclick="JoinLobby">Join Lobby</button>
+        </div>
+    </div>
+}
 
 
-    @* LOBBY *@
-    else if (!_isGameStart)
-    {
-        <div class="container">
-            <div id="game-controller">
-                @if (!_player.IsLobbyReady && _player.Team != Teams.None)
-                {
-                    <button class="start-game" @onclick="LobbyReady">Ready</button>
-                }
-                else if (_player.Team != Teams.None)
-                {
-                    <button class="start-game" @onclick="LobbyUnready">Unready</button>
-                }
-            </div>
-            <div id="teams">
-                <div id="team1-list">
-                    <table>
-                        <thead>
-                            <tr>
-                                <th>Team 1</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @{
-                                var team1Players = GameDatabase.GameManager.GetTeam(Teams.Team1).Players;
-                                @if (team1Players.Count > 0)
-                                {
-                                    @foreach (var player in team1Players)
-                                    {
-                                        <tr>
-                                            <td>@player.Name</td>
-                                        </tr>
-                                    }
-                                }
-                            }
-                            @if (!_isJoinTeam1)
+@* LOBBY *@
+else if (!_isGameStart)
+{
+    <div class="container">
+        <div id="game-controller">
+            @if (!_player.IsLobbyReady && _player.Team != Teams.None)
+            {
+                <button class="start-game" @onclick="LobbyReady">Ready</button>
+            }
+            else if (_player.Team != Teams.None)
+            {
+                <button class="start-game" @onclick="LobbyUnready">Unready</button>
+            }
+        </div>
+        <div id="teams">
+            <div id="team1-list">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Team 1</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @{
+                            var team1Players = GameDatabase.GameManager.GetTeam(Teams.Team1).Players;
+                            @if (team1Players.Count > 0)
                             {
-                                <tr>
-                                    <td>
-                                        <button class="join-team-btn" @onclick="(() => JoinTeam(Teams.Team1))">Join</button>
-                                    </td>
-                                </tr>
-                            }
-                        </tbody>
-                    </table>
-                </div>
-                <div id="players-list">
-                    <table>
-                        <thead>
-                            <tr>
-                                <th>Players List</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @if (GameDatabase.GetPlayers().Count > 0)
-                            {
-                                var players = GameDatabase.GetPlayers();
-                                @foreach (var player in players)
+                                @foreach (var player in team1Players)
                                 {
                                     <tr>
                                         <td>@player.Name</td>
                                     </tr>
                                 }
                             }
-                        </tbody>
-                    </table>
-                </div>
-                <div id="team2-list">
-                    <table>
-                        <thead>
+                        }
+                        @if (!_isJoinTeam1)
+                        {
                             <tr>
-                                <th>Team 2</th>
+                                <td>
+                                    <button class="join-team-btn" @onclick="(() => JoinTeam(Teams.Team1))">Join</button>
+                                </td>
                             </tr>
-                        </thead>
-                        <tbody>
-                            @{
-                                var team2Players = GameDatabase.GameManager.GetTeam(Teams.Team2).Players;
-                                @if (team2Players.Count > 0)
-                                {
-                                    @foreach (var player in team2Players)
-                                    {
-                                        <tr>
-                                            <td>@player.Name</td>
-                                        </tr>
-                                    }
-                                }
-                            }
-                            @if (!_isJoinTeam2)
+                        }
+                    </tbody>
+                </table>
+            </div>
+            <div id="players-list">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Players List</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @if (GameDatabase.GetPlayers().Count > 0)
+                        {
+                            var players = GameDatabase.GetPlayers();
+                            @foreach (var player in players)
                             {
                                 <tr>
-                                    <td>
-                                        <button class="join-team-btn" @onclick="(() => JoinTeam(Teams.Team2))">Join</button>
-                                    </td>
+                                    <td>@player.Name</td>
                                 </tr>
                             }
-                        </tbody>
-                    </table>
-                </div>
+                        }
+                    </tbody>
+                </table>
+            </div>
+            <div id="team2-list">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Team 2</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @{
+                            var team2Players = GameDatabase.GameManager.GetTeam(Teams.Team2).Players;
+                            @if (team2Players.Count > 0)
+                            {
+                                @foreach (var player in team2Players)
+                                {
+                                    <tr>
+                                        <td>@player.Name</td>
+                                    </tr>
+                                }
+                            }
+                        }
+                        @if (!_isJoinTeam2)
+                        {
+                            <tr>
+                                <td>
+                                    <button class="join-team-btn" @onclick="(() => JoinTeam(Teams.Team2))">Join</button>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
             </div>
         </div>
-    }
+    </div>
+}
 
 
-    @* GAME *@
-    else if (_isLogin)
-    {
-        <div class="container">
-            <div id="game">
-                <div class="scoreboard">
-                    <span class="scoreboard-title">Scoreboard</span>
-                    <div id="scores">
-                        <span>@GameDatabase.GameManager.Team1Name:</span>
-                        <span>@GameDatabase.GameManager.Team1Score</span>
-                        <span>VS</span>
-                        <span>@GameDatabase.GameManager.Team2Name: </span>
-                        <span>@GameDatabase.GameManager.Team2Score</span>
-                    </div>
-                    <div class="number-of-win">
-                        <span>Number of win:</span>
-                        <span id="win-number">@GameDatabase.GameManager.NumberOfWin</span>
-                    </div>
+@* GAME *@
+else if (_isLogin)
+{
+    <div class="container">
+        <div id="game">
+            <div class="scoreboard">
+                <span class="scoreboard-title">Scoreboard</span>
+                <div id="scores">
+                    <span>@GameDatabase.GameManager.Team1Name:</span>
+                    <span>@GameDatabase.GameManager.Team1Score</span>
+                    <span>VS</span>
+                    <span>@GameDatabase.GameManager.Team2Name: </span>
+                    <span>@GameDatabase.GameManager.Team2Score</span>
                 </div>
-                @if (!GameDatabase.GameManager.IsGameOver)
+                <div class="number-of-win">
+                    <span>Number of win:</span>
+                    <span id="win-number">@GameDatabase.GameManager.NumberOfWin</span>
+                </div>
+            </div>
+            @if (!GameDatabase.GameManager.IsGameOver)
+            {
+                @if (GameDatabase.GameManager.IsRoundStart)
                 {
-                    @if (!GameDatabase.GameManager.IsRounEnd)
+                    @if (GameDatabase.GameManager.IsOpponentPlayer(_player) || GameDatabase.GameManager.IsSpeakerPlayer(_player))
                     {
-                        @if (GameDatabase.GameManager.IsOpponentPlayer(_player) || GameDatabase.GameManager.IsSpeakerPlayer(_player))
-                        {
-                            <div id="word-card">
-                                <div class="word-card-header">
-                                    <span id="word">@GameDatabase.GameManager.WordCard.Word</span>
-                                    <span id="counter">@_counter</span>
-                                </div>
-                                <div class="word-card-boady">
-                                    <ul>
-                                        @foreach (var item in @GameDatabase.GameManager.WordCard.ForbiddenWords)
-                                        {
-                                            <li>@item</li>
-                                        }
-                                    </ul>
-                                </div>
+                        <div id="word-card">
+                            <div class="word-card-header">
+                                <span id="word">@GameDatabase.GameManager.WordCard.Word</span>
+                                <span id="counter">@_counter</span>
                             </div>
-                        }
-
-                        @if (GameDatabase.GameManager.IsOpponentPlayer(_player))
-                        {
-                            <div id="word-controller">
-                                <button class="word-controller-btn" id="true" @onclick="TrueButton">
-                                    <i class="fas fa-check"></i>
-                                </button>
-                                <button class="word-controller-btn" id="taboo" @onclick="TabooButton">
-                                    <i class="fas fa-times"></i>
-                                    <span>@GameDatabase.GameManager.RightToTaboo</span>
-                                </button>
-                                <button class="word-controller-btn" id="pass" @onclick="PassButton">
-                                    <i class="fas fa-arrow-right"></i>
-                                    <span>@GameDatabase.GameManager.RightToPass</span>
-                                </button>
+                            <div class="word-card-boady">
+                                <ul>
+                                    @foreach (var item in @GameDatabase.GameManager.WordCard.ForbiddenWords)
+                                    {
+                                        <li>@item</li>
+                                    }
+                                </ul>
                             </div>
-                        }
+                        </div>
                     }
-                    else
+
+                    @if (GameDatabase.GameManager.IsOpponentPlayer(_player))
                     {
-                        <div id="round-end">
-                            <div>
-                                <span>NEXT TEAM: @GameDatabase.GameManager.CurrentPlayingTeam.Name</span>
-                                <span>NEXT Speaker Player: @GameDatabase.GameManager.CurrentSpeakerPlayer.Name</span>
-                            </div>
-                            @if (_player.IsNextRoundReady)
-                            {
-                                <button @onclick="NextRoundUnready">NOT READY</button>
-                            }
-                            else
-                            {
-                                <button @onclick="NextRoundReady">READY</button>
-                            }
+                        <div id="word-controller">
+                            <button class="word-controller-btn" id="true" @onclick="TrueButton">
+                                <i class="fas fa-check"></i>
+                            </button>
+                            <button class="word-controller-btn" id="taboo" @onclick="TabooButton">
+                                <i class="fas fa-times"></i>
+                                <span>@GameDatabase.GameManager.RightToTaboo</span>
+                            </button>
+                            <button class="word-controller-btn" id="pass" @onclick="PassButton">
+                                <i class="fas fa-arrow-right"></i>
+                                <span>@GameDatabase.GameManager.RightToPass</span>
+                            </button>
                         </div>
                     }
                 }
                 else
                 {
-                    <div id="game-over">
-                        <button>GO TO LOBBY</button>
+                    <div id="round-end">
+                        <div>
+                            <span>NEXT TEAM: @GameDatabase.GameManager.CurrentPlayingTeam.Name</span>
+                            <span>NEXT Speaker Player: @GameDatabase.GameManager.CurrentSpeakerPlayer.Name</span>
+                        </div>
+                        @if (_player.IsNextRoundReady)
+                        {
+                            <button @onclick="NextRoundUnready">NOT READY</button>
+                        }
+                        else
+                        {
+                            <button @onclick="NextRoundReady">READY</button>
+                        }
                     </div>
                 }
-            </div>
-        </div>
-    }
-
-
-    @code{
-        #region Variables
-        private string _hubUrl;
-        private HubConnection _hubConnection;
-
-        private Player _player = new Player();
-
-        private bool _isLogin = false;
-        private bool _isGameStart = false;
-        private bool _isJoinTeam1 = false;
-        private bool _isJoinTeam2 = false;
-
-        private Timer _timer;
-        private int _counter;
-        #endregion
-
-        #region Initialize
-        protected override async Task OnInitializedAsync()
-        {
-            string baseUrl = navigationManager.BaseUri;
-
-            _hubUrl = baseUrl.TrimEnd('/') + GameHub.url;
-
-            _hubConnection = new HubConnectionBuilder()
-                .WithUrl(_hubUrl)
-                .Build();
-
-
-            _hubConnection.On("GetPlayerID", (string id) => _player.ID = id);
-            _hubConnection.On("JoinLobby", () => StateHasChanged());
-            _hubConnection.On("Refresh", () => StateHasChanged());
-
-            _hubConnection.On("GameStart", () =>
-            {
-                _counter = GameDatabase.GameManager.GetCounter;
-                _isGameStart = true;
-                StartCounter();
-                StateHasChanged();
-            });
-
-            await _hubConnection.StartAsync();
-        }
-        #endregion
-
-        #region LOGIN
-        private void JoinLobby()
-        {
-            GameDatabase.AddPlayer(_player);
-            _player = GameDatabase.GetPlayer(_player.ID);
-            _isLogin = true;
-            StateHasChanged();
-            _hubConnection.InvokeAsync("JoinLobby", _player);
-        }
-        #endregion
-
-        #region LOBBY
-        private void JoinTeam(Teams team)
-        {
-            if (team == Teams.Team1) { _isJoinTeam1 = true; _isJoinTeam2 = false; }
-            else if (team == Teams.Team2) { _isJoinTeam2 = true; _isJoinTeam1 = false; }
-
-            _player.Team = team;
-            GameDatabase.GameManager.AddTeam(_player);
-            StateHasChanged();
-            _hubConnection.InvokeAsync("JoinTeam");
-        }
-
-        private void LobbyReady()
-        {
-            _player.IsLobbyReady = true;
-            if (GameDatabase.GameManager.PlayersIsLobbyReady())
-                _hubConnection.InvokeAsync("GameStart");
-        }
-
-        private void LobbyUnready() => _player.IsLobbyReady = false;
-        #endregion
-
-        #region GAME
-        private void NextRoundReady()
-        {
-            _player.IsNextRoundReady = true;
-            if (GameDatabase.GameManager.PlayersIsNextRoundReady())
-                _hubConnection.InvokeAsync("GameStart");
-        }
-
-        private void NextRoundUnready() => _player.IsNextRoundReady = false;
-
-        private void StartCounter()
-        {
-            _timer = new Timer(1000);
-            _timer.Elapsed += OnTimer;
-            _timer.Enabled = true;
-            _timer.Start();
-        }
-
-        private void OnTimer(object o, ElapsedEventArgs eventArgs)
-        {
-            _counter--;
-            InvokeAsync(() => StateHasChanged());
-
-            if (_counter <= 0)
-            {
-                _timer.Dispose();
-                _timer.Stop();
-                GameDatabase.GameManager.SetIsRoundEnd(true);
-                InvokeAsync(() => StateHasChanged());
             }
-        }
+            else
+            {
+                <div id="game-over">
+                    <button>GO TO LOBBY</button>
+                </div>
+            }
+        </div>
+    </div>
+}
 
-        private void TrueButton()
-        {
-            GameDatabase.GameManager.TrueButton();
-            StateHasChanged();
-            _hubConnection.InvokeAsync("TrueButton");
-        }
 
-        private void TabooButton()
-        {
-            GameDatabase.GameManager.TabooButton();
-            StateHasChanged();
-            _hubConnection.InvokeAsync("TabooButton");
-        }
+@code{
+    #region Variables
+    private string _hubUrl;
+    private HubConnection _hubConnection;
 
-        private void PassButton()
+    private Player _player = new Player();
+
+    private bool _isLogin = false;
+    private bool _isGameStart = false;
+    private bool _isJoinTeam1 = false;
+    private bool _isJoinTeam2 = false;
+
+    private Timer _timer;
+    private int _counter;
+    #endregion
+
+    #region Initialize
+    protected override async Task OnInitializedAsync()
+    {
+        string baseUrl = navigationManager.BaseUri;
+
+        _hubUrl = baseUrl.TrimEnd('/') + GameHub.url;
+
+        _hubConnection = new HubConnectionBuilder()
+            .WithUrl(_hubUrl)
+            .Build();
+
+
+        _hubConnection.On("GetPlayerID", (string id) => _player.ID = id);
+        _hubConnection.On("JoinLobby", () => StateHasChanged());
+        _hubConnection.On("Refresh", () => StateHasChanged());
+
+        _hubConnection.On("GenerateGame", () =>
         {
-            GameDatabase.GameManager.PassButton();
             StateHasChanged();
-            _hubConnection.InvokeAsync("PassButton");
-        }
-        #endregion
+            _isGameStart = true;
+            StateHasChanged();
+        });
+        _hubConnection.On("StartGame", () =>
+        {
+            _counter = GameDatabase.GameManager.GetCounter;
+            StateHasChanged();
+            StartCounter();
+        });
+
+        await _hubConnection.StartAsync();
     }
+    #endregion
+
+    #region LOGIN
+    private void JoinLobby()
+    {
+        GameDatabase.AddPlayer(_player);
+        _player = GameDatabase.GetPlayer(_player.ID);
+        _isLogin = true;
+        StateHasChanged();
+        _hubConnection.InvokeAsync("JoinLobby", _player);
+    }
+    #endregion
+
+    #region LOBBY
+    private void JoinTeam(Teams team)
+    {
+        if (team == Teams.Team1) { _isJoinTeam1 = true; _isJoinTeam2 = false; }
+        else if (team == Teams.Team2) { _isJoinTeam2 = true; _isJoinTeam1 = false; }
+
+        _player.Team = team;
+        GameDatabase.GameManager.AddTeam(_player);
+        StateHasChanged();
+        _hubConnection.InvokeAsync("JoinTeam");
+    }
+
+    private void LobbyReady()
+    {
+        _player.IsLobbyReady = true;
+        if (GameDatabase.GameManager.PlayersIsLobbyReady())
+            _hubConnection.InvokeAsync("GenerateGame");
+    }
+
+    private void LobbyUnready() => _player.IsLobbyReady = false;
+    #endregion
+
+    #region GAME
+    private void NextRoundReady()
+    {
+        _player.IsNextRoundReady = true;
+        if (GameDatabase.GameManager.PlayersIsNextRoundReady())
+        {
+            GameDatabase.GameManager.SetIsRoundStart(true);
+            _hubConnection.InvokeAsync("StartGame");
+        }
+    }
+
+    private void NextRoundUnready() => _player.IsNextRoundReady = false;
+
+    private void StartCounter()
+    {
+        _timer = new Timer(1000);
+        _timer.Elapsed += OnTimer;
+        _timer.Enabled = true;
+        _timer.Start();
+    }
+
+    private void OnTimer(object o, ElapsedEventArgs eventArgs)
+    {
+        _counter--;
+        InvokeAsync(() => StateHasChanged());
+
+        if (_counter <= 0)
+            _timer.Dispose();
+    }
+
+    private void TrueButton()
+    {
+        GameDatabase.GameManager.TrueButton();
+        StateHasChanged();
+        _hubConnection.InvokeAsync("TrueButton");
+    }
+
+    private void TabooButton()
+    {
+        GameDatabase.GameManager.TabooButton();
+        StateHasChanged();
+        _hubConnection.InvokeAsync("TabooButton");
+    }
+
+    private void PassButton()
+    {
+        GameDatabase.GameManager.PassButton();
+        StateHasChanged();
+        _hubConnection.InvokeAsync("PassButton");
+    }
+    #endregion
+}
 
 
 

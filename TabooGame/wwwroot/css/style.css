@@ -1,0 +1,372 @@
+:root {
+  --background: #ffff99;
+  --wrapper: #009688;
+  --wrapper-color: #ffffff;
+  --wrapper-shadow: #009688b8;
+  --table-list-background: #f44336;
+  --table-list-color: white;
+  --table-list-border: white;
+  --join-btn-background: #009688;
+  --join-btn-color: white;
+  --ready-btn-background: #eeee7f;
+  --ready-btn-color: #009688;
+}
+
+* {
+  padding: 0;
+  margin: 0;
+  text-decoration: none;
+  list-style: none;
+  box-sizing: border-box;
+  outline: none;
+  font-family: cursive;
+}
+
+html,
+body {
+  background-color: var(--background);
+  overflow: hidden;
+}
+
+button {
+  cursor: pointer;
+  transition: all 0.2s;
+  border: none;
+  font-weight: bold;
+}
+
+/* Chrome, Safari, Edge, Opera */
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* Firefox */
+input[type="number"] {
+  -moz-appearance: textfield;
+}
+
+select {
+  width: 100px;
+  padding: 4px;
+  cursor: pointer;
+  border: none;
+  color: var(--wrapper);
+}
+
+select:focus,
+select:hover {
+  border: none;
+}
+
+::-webkit-scrollbar {
+  width: 5px;
+  background-color: var(--table-list-background);
+}
+
+::-webkit-scrollbar-thumb {
+  border-radius: 10px;
+  background-color: #5f6368;
+}
+
+.wrapper {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: var(--wrapper);
+  color: var(--wrapper-color);
+  border-radius: 8px;
+  -webkit-box-shadow: 0px 0px 5px 5px var(--wrapper-shadow);
+  -moz-box-shadow: 0px 0px 5px 5px var(--wrapper-shadow);
+  box-shadow: 0px 0px 5px 5px var(--wrapper-shadow);
+}
+
+#login {
+  display: flex;
+  flex-direction: column;
+  padding: 40px 80px;
+  border-radius: 8px;
+}
+
+#login input {
+  width: 260px;
+  height: 45px;
+  padding: 0 14px;
+  margin: 4px 0;
+  border: 4px solid var(--background);
+  border-radius: 8px;
+  font-size: 16pt;
+  color: #757575;
+}
+
+#login button {
+  width: 260px;
+  padding: 6px 0;
+  margin-top: 12px;
+  border-radius: 8px;
+  font-size: 22pt;
+  background-color: #f44336;
+  color: white;
+}
+
+#login button:hover {
+  transform: scale(0.9);
+}
+
+#lobby {
+  width: 1000px;
+  padding: 40px 80px;
+  border-radius: inherit;
+}
+#back-btn {
+  padding: 14px 16px;
+  border-radius: 8px;
+  background-color: #f44336;
+  color: white;
+}
+
+#back-btn:hover {
+  transform: scale(0.9);
+}
+
+#lobby-settings {
+  margin-bottom: 60px;
+  font-size: 10pt;
+}
+
+#lobby-settings .lobby-setting span {
+  display: inline-block;
+  margin-bottom: 6px;
+}
+
+#lobby-settings fieldset {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 20px;
+  text-align: center;
+  border: 2px solid var(--background);
+  border-radius: 8px;
+}
+
+#lobby-settings fieldset legend {
+  padding: 0 12px;
+  font-size: 14pt;
+  font-weight: bold;
+}
+
+#ready-btn {
+  padding: 8px 24px;
+  font-size: 14pt;
+  border-radius: 4px;
+  margin-left: 10px;
+  background-color: var(--ready-btn-background);
+  color: var(--ready-btn-color);
+}
+
+#ready-btn:hover {
+  -webkit-box-shadow: 0px 0px 5px 2px var(--background);
+  -moz-box-shadow: 0px 0px 5px 2px var(--background);
+  box-shadow: 0px 0px 5px 2px var(--background);
+}
+
+#lobby #lists {
+  display: flex;
+  justify-content: space-between;
+}
+
+.list-table {
+  display: block;
+  height: fit-content;
+  max-height: 355px;
+  overflow-y: auto;
+  border-collapse: collapse;
+  font-size: 12pt;
+  background-color: var(--table-list-background);
+  color: var(--table-list-color);
+}
+
+#lobby .list-table:last-child {
+  margin-right: 0;
+}
+
+.list-table tr {
+  text-align: center;
+}
+
+.list-table th {
+  font-size: 14pt;
+}
+
+.list-table td,
+th {
+  width: 180px;
+  height: 50px;
+  border: 2px solid var(--table-list-border);
+}
+
+.join-btn {
+  width: 100%;
+  height: 100%;
+  font-size: 12pt;
+  background-color: var(--join-btn-background);
+  color: var(--join-btn-color);
+}
+
+.join-btn:hover {
+  background-color: #015c54;
+}
+
+#kick-btn {
+  width: 100%;
+  height: 100%;
+  color: inherit;
+  font-size: inherit;
+  background-color: transparent;
+}
+
+#kick-btn:hover {
+  color: black;
+}
+
+#round-start {
+  width: 1000px;
+  padding: 40px 80px;
+}
+
+#scoreboard {
+  width: 100%;
+  padding: 10px 20px;
+  text-align: center;
+  border: 2px solid var(--background);
+  border-radius: 8px;
+  font-size: 16pt;
+  font-weight: bold;
+}
+
+#scoreboard div:nth-child(2) {
+  margin: 0 16px;
+}
+
+.score {
+  display: inline;
+}
+
+.number-of-win {
+  margin-top: 6px;
+  font-size: 12pt;
+}
+
+#counter {
+  margin-top: 10px;
+}
+
+.next-round-info {
+  margin-top: 30px;
+  text-align: center;
+  font-size: 14pt;
+}
+
+.next-round-info > div {
+  margin-top: 8px;
+}
+
+.next-round-info div:last-child {
+  margin-top: 24px;
+}
+
+#game-over {
+  width: 1000px;
+  padding: 40px 80px;
+  text-align: center;
+}
+
+.winner-info {
+  margin: 30px 0;
+  font-size: 16pt;
+}
+
+#game-over button {
+  width: 200px;
+  padding: 16px 0;
+  border-radius: 8px;
+  font-size: 14pt;
+  color: white;
+  background-color: var(--table-list-background);
+}
+
+#game-over button:hover {
+  transform: scale(0.9);
+}
+
+#game {
+  width: 1000px;
+  padding: 40px 80px;
+}
+
+#game-body {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 40px;
+}
+
+#word-card {
+  width: 300px;
+  padding: 14px 0 0 0;
+  text-align: center;
+  border: 3px solid black;
+  border-radius: 8px;
+  background-color: #ffff99;
+  color: black;
+}
+
+#word-card-header {
+  padding: 0 8px 14px 8px;
+  font-size: 18pt;
+  font-weight: bold;
+}
+
+#word-card-body {
+  font-size: 16pt;
+}
+
+#word-card-body ul {
+  width: 100%;
+}
+
+#word-card-body ul li {
+  padding: 10px 8px;
+  border-top: 3px solid black;
+}
+
+#word-card-controller {
+  border-top: 3px solid black;
+  text-align: center;
+  padding: 14px 8px;
+}
+
+#word-card-controller button {
+  width: 88px;
+  height: 40px;
+  border-radius: 8px;
+  color: white;
+}
+
+#word-card-controller button:hover {
+  transform: scale(0.9);
+}
+
+#word-card-controller #true-btn {
+  background-color: #4caf50;
+}
+
+#word-card-controller #taboo-btn {
+  margin: 0 2px;
+  background-color: #f44336;
+}
+
+#word-card-controller #pass-btn {
+  background-color: #009688;
+}

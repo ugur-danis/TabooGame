@@ -2,346 +2,403 @@
 @page "/"
 @page "/Game"
 @* LOGIN *@
-@if (!_isLogin)
-{
-    <div id="login">
-
-        <div id="login-inputs">
-            <input type="text" id="player-name" placeholder="Player Name" @bind="_player.Name">
+<div class="wrapper">
+    @if (_screens == Screens.LOGIN)
+    {
+        <div id="login">
+            <input type="text" placeholder="Player Name" @bind="_player.Name">
+            <input type="number" placeholder="Lobby ID" @bind="_lobbyID">
+            <button @onclick="Play">PLAY</button>
         </div>
-
-        <div id="login-btns">
-            <button id="join-lobby" @onclick="JoinLobby">Join Lobby</button>
-        </div>
-    </div>
-}
-
-
-@* LOBBY *@
-else if (!_isGameStart)
-{
-    <div class="container">
-        <div id="game-controller">
-            @if (!_player.IsLobbyReady && _player.Team != Teams.None)
-            {
-                <button class="start-game" @onclick="LobbyReady">Ready</button>
-            }
-            else if (_player.Team != Teams.None)
-            {
-                <button class="start-game" @onclick="LobbyUnready">Unready</button>
-            }
-        </div>
-        <div id="teams">
-            <div id="team1-list">
-                <table>
+    }
+    else if (_screens == Screens.LOBBY)
+    {
+        <div id="lobby">
+            <button id="back-btn" @onclick="()=>_screens = Screens.LOGIN">GO TO BACK</button>
+            <div id="lobby-settings">
+                <fieldset>
+                    <legend>Game Options</legend>
+                    <div class="lobby-setting">
+                        LOBBY ID @_lobby.ID
+                    </div>
+                    <div class="lobby-setting">
+                        <span>Number of win</span>
+                        <select>
+                            <option>10</option>
+                            <option selected>20</option>
+                            <option>30</option>
+                            <option>40</option>
+                            <option>50</option>
+                        </select>
+                    </div>
+                    <div class="lobby-setting">
+                        <span>Remaining Pass</span>
+                        <select>
+                            <option>1</option>
+                            <option>2</option>
+                            <option selected>3</option>
+                        </select>
+                    </div>
+                    <div class="lobby-setting">
+                        <span>Remaining Taboo</span>
+                        <select>
+                            <option>1</option>
+                            <option>2</option>
+                            <option selected>3</option>
+                        </select>
+                    </div>
+                    <div class="lobby-setting">
+                        <span>Time For Speaker</span>
+                        <select>
+                            <option>30s</option>
+                            <option>40s</option>
+                            <option>50s</option>
+                            <option selected>60s</option>
+                            <option>70s</option>
+                            <option>80s</option>
+                            <option>90s</option>
+                        </select>
+                    </div>
+                    @if (!_isReady)
+                    {
+                        <button id="ready-btn" @onclick="() => Ready(true)">READY</button>
+                    }
+                    else
+                    {
+                        <button id="ready-btn" @onclick="() => Ready(false)">UNREADY</button>
+                    }
+                </fieldset>
+            </div>
+            <div id="lists">
+                <table class="list-table">
                     <thead>
                         <tr>
-                            <th>Team 1</th>
+                            <th>@_lobby.Team1.Name</th>
                         </tr>
                     </thead>
                     <tbody>
-                        @{
-                            var team1Players = GameDatabase.GameManager.GetTeam(Teams.Team1).Players;
-                            @if (team1Players.Count > 0)
-                            {
-                                @foreach (var player in team1Players)
-                                {
-                                    <tr>
-                                        <td>@player.Name</td>
-                                    </tr>
-                                }
-                            }
+                        @foreach (var player in _lobby.Team1.Players)
+                        {
+                            <tr>
+                                <td>@player.Name</td>
+                            </tr>
                         }
-                        @if (!_isJoinTeam1)
+                        @if (_showTeam1JoinBtn)
                         {
                             <tr>
                                 <td>
-                                    <button class="join-team-btn" @onclick="(() => JoinTeam(Teams.Team1))">Join</button>
+                                    <button class="join-btn" @onclick="()=>ChangeTeam(_lobby.Team1,_lobby.Team2)">JOIN</button>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+                <table class="list-table">
+                    <thead>
+                        <tr>
+                            <th>PLAYERS</th>
+                            @if (_lobby.Admin == _player)
+                            {
+                                <th>ADMIN</th>
+                            }
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var player in _lobby.Players)
+                        {
+                            <tr>
+                                <td>@player.Name</td>
+                                @if (_lobby.Admin == _player)
+                                {
+                                    <td>
+                                        <button id="kick-btn">KICK</button>
+                                    </td>
+                                }
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+                <table class="list-table">
+                    <thead>
+                        <tr>
+                            <th>@_lobby.Team2.Name</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var player in _lobby.Team2.Players)
+                        {
+                            <tr>
+                                <td>@player.Name</td>
+                            </tr>
+                        }
+                        @if (_showTeam2JoinBtn)
+                        {
+                            <tr>
+                                <td>
+                                    <button class="join-btn" @onclick="()=>ChangeTeam(_lobby.Team2,_lobby.Team1)">JOIN</button>
                                 </td>
                             </tr>
                         }
                     </tbody>
                 </table>
             </div>
-            <div id="players-list">
-                <table>
-                    <thead>
-                        <tr>
-                            <th>Players List</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @if (GameDatabase.GetPlayers().Count > 0)
-                        {
-                            var players = GameDatabase.GetPlayers();
-                            @foreach (var player in players)
-                            {
-                                <tr>
-                                    <td>@player.Name</td>
-                                </tr>
-                            }
-                        }
-                    </tbody>
-                </table>
-            </div>
-            <div id="team2-list">
-                <table>
-                    <thead>
-                        <tr>
-                            <th>Team 2</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @{
-                            var team2Players = GameDatabase.GameManager.GetTeam(Teams.Team2).Players;
-                            @if (team2Players.Count > 0)
-                            {
-                                @foreach (var player in team2Players)
-                                {
-                                    <tr>
-                                        <td>@player.Name</td>
-                                    </tr>
-                                }
-                            }
-                        }
-                        @if (!_isJoinTeam2)
-                        {
-                            <tr>
-                                <td>
-                                    <button class="join-team-btn" @onclick="(() => JoinTeam(Teams.Team2))">Join</button>
-                                </td>
-                            </tr>
-                        }
-                    </tbody>
-                </table>
-            </div>
         </div>
-    </div>
-}
-
-
-@* GAME *@
-else if (_isLogin)
-{
-    <div class="container">
-        <div id="game">
-            <div class="scoreboard">
-                <span class="scoreboard-title">Scoreboard</span>
-                <div id="scores">
-                    <span>@GameDatabase.GameManager.Team1Name:</span>
-                    <span>@GameDatabase.GameManager.Team1Score</span>
-                    <span>VS</span>
-                    <span>@GameDatabase.GameManager.Team2Name: </span>
-                    <span>@GameDatabase.GameManager.Team2Score</span>
+    }
+    else if (_screens == Screens.ROUND_START)
+    {
+        <div id="round-start">
+            <div id="scoreboard">
+                <div class="score">
+                    <span>@_lobby.Team1.Name</span>
+                    <span>@_lobby.Game.Team1Score</span>
+                </div>
+                <div class="score">VS</div>
+                <div class="score">
+                    <span>@_lobby.Team2.Name</span>
+                    <span>@_lobby.Game.Team2Score</span>
                 </div>
                 <div class="number-of-win">
-                    <span>Number of win:</span>
-                    <span id="win-number">@GameDatabase.GameManager.NumberOfWin</span>
+                    Number Of Win: @_lobby.Game.NumberOfWin
                 </div>
             </div>
-            @if (!GameDatabase.GameManager.IsGameOver)
-            {
-                @if (GameDatabase.GameManager.IsRoundStart)
-                {
-                    @if (GameDatabase.GameManager.IsOpponentPlayer(_player) || GameDatabase.GameManager.IsSpeakerPlayer(_player))
-                    {
-                        <div id="word-card">
-                            <div class="word-card-header">
-                                <span id="word">@GameDatabase.GameManager.WordCard.Word</span>
-                                <span id="counter">@_counter</span>
-                            </div>
-                            <div class="word-card-boady">
-                                <ul>
-                                    @foreach (var item in @GameDatabase.GameManager.WordCard.ForbiddenWords)
-                                    {
-                                        <li>@item</li>
-                                    }
-                                </ul>
-                            </div>
-                        </div>
-                    }
-
-                    @if (GameDatabase.GameManager.IsOpponentPlayer(_player))
-                    {
-                        <div id="word-controller">
-                            <button class="word-controller-btn" id="true" @onclick="TrueButton">
-                                <i class="fas fa-check"></i>
-                            </button>
-                            <button class="word-controller-btn" id="taboo" @onclick="TabooButton">
-                                <i class="fas fa-times"></i>
-                                <span>@GameDatabase.GameManager.RightToTaboo</span>
-                            </button>
-                            <button class="word-controller-btn" id="pass" @onclick="PassButton">
-                                <i class="fas fa-arrow-right"></i>
-                                <span>@GameDatabase.GameManager.RightToPass</span>
-                            </button>
-                        </div>
-                    }
-                }
-                else
-                {
-                    <div id="round-end">
-                        <div>
-                            <span>NEXT TEAM: @GameDatabase.GameManager.CurrentPlayingTeam.Name</span>
-                            <span>NEXT Speaker Player: @GameDatabase.GameManager.CurrentSpeakerPlayer.Name</span>
-                        </div>
-                        @if (_player.IsNextRoundReady)
-                        {
-                            <button @onclick="NextRoundUnready">NOT READY</button>
-                        }
-                        else
-                        {
-                            <button @onclick="NextRoundReady">READY</button>
-                        }
-                    </div>
-                }
-            }
-            else
-            {
-                <div id="game-over">
-                    <button>GO TO LOBBY</button>
+            <div class="next-round-info">
+                <div>Next Round Team: @_lobby.Game.CurrentPlayingTeam.Name</div>
+                <div>Next Round Narrator Player: @_lobby.Game.CurrentNarratorPlayer.Name</div>
+                <div id="round-start-counter">
+                    Round starts in @roundStartCounter second
                 </div>
-            }
+            </div>
         </div>
-    </div>
-}
 
-
+    }
+    else if (_screens == Screens.GAME)
+    {
+        <div id="game">
+            <div id="game-header">
+                <div id="scoreboard">
+                    <div class="score">
+                        <span>@_lobby.Team1.Name</span>
+                        <span>@_lobby.Game.Team1Score</span>
+                    </div>
+                    <div class="score">VS</div>
+                    <div class="score">
+                        <span>@_lobby.Team2.Name</span>
+                        <span>@_lobby.Game.Team2Score</span>
+                    </div>
+                    <div class="number-of-win">
+                        Number Of Win: @_lobby.Game.NumberOfWin
+                    </div>
+                    <div id="counter">Time: @gameCounter</div>
+                </div>
+            </div>
+            <div id="game-body">
+                <table class="list-table">
+                    <thead>
+                        <tr>
+                            <th>@_lobby.Team1.Name</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var player in _lobby.Team1.Players)
+                        {
+                            <tr>
+                                <td>@player.Name</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+                <div id="word-card">
+                    <div id="word-card-header">
+                        <div id="word">
+                            @_lobby.Game.WordCard.Word
+                        </div>
+                    </div>
+                    <div id="word-card-body">
+                        <ul>
+                            @foreach (var forbiddenWord in @_lobby.Game.WordCard.ForbiddenWords)
+                            {
+                                <li>@forbiddenWord</li>
+                            }
+                        </ul>
+                    </div>
+                    <div id="word-card-controller">
+                        <button id="true-btn">TRUE</button>
+                        <button id="taboo-btn">TABOO</button>
+                        <button id="pass-btn">PASS</button>
+                    </div>
+                </div>
+                <table class="list-table">
+                    <thead>
+                        <tr>
+                            <th>@_lobby.Team2.Name</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var player in _lobby.Team2.Players)
+                        {
+                            <tr>
+                                <td>@player.Name</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    }
+    else // GAME_OVER
+    {
+        <div id="game-over">
+            <div id="scoreboard">
+                <div class="score">
+                    <span>@_lobby.Team1.Name</span>
+                    <span>@_lobby.Game.Team1Score</span>
+                </div>
+                <div class="score">VS</div>
+                <div class="score">
+                    <span>@_lobby.Team2.Name</span>
+                    <span>@_lobby.Game.Team2Score</span>
+                </div>
+                <div class="number-of-win">
+                    Number Of Win: @_lobby.Game.NumberOfWin
+                </div>
+            </div>
+            <div class="winner-info">
+                <div>
+                    Winner Team: @_lobby.Game.CurrentPlayingTeam
+                </div>
+            </div>
+            <button @onclick="()=>_screens = Screens.LOBBY">GO TO LOBBY</button>
+        </div>
+    }
+</div>
 @code{
     #region Variables
-    private string _hubUrl;
-    private HubConnection _hubConnection;
-
+    #region UI
+    private enum Screens { LOGIN = 0, LOBBY, GAME, GAMEOVER, ROUND_START }
+    private Screens _screens = Screens.LOGIN;
+    private bool _showTeam1JoinBtn = true;
+    private bool _showTeam2JoinBtn = true;
+    private bool _isReady = false;
+    #endregion
     private Player _player = new Player();
-
-    private bool _isLogin = false;
-    private bool _isGameStart = false;
-    private bool _isJoinTeam1 = false;
-    private bool _isJoinTeam2 = false;
-
-    private Timer _timer;
-    private int _counter;
+    private Lobby _lobby;
+    private string _lobbyID;
     #endregion
 
     #region Initialize
+    private string _hubUrl;
+    private HubConnection _hubConnection;
+
     protected override async Task OnInitializedAsync()
     {
         string baseUrl = navigationManager.BaseUri;
-
         _hubUrl = baseUrl.TrimEnd('/') + GameHub.url;
-
         _hubConnection = new HubConnectionBuilder()
             .WithUrl(_hubUrl)
             .Build();
 
-
-        _hubConnection.On("GetPlayerID", (string id) => _player.ID = id);
-        _hubConnection.On("JoinLobby", () => StateHasChanged());
+        _hubConnection.On<string>("GetPlayerID", (string id) => _player.ID = id);
         _hubConnection.On("Refresh", () => StateHasChanged());
-
-        _hubConnection.On("GenerateGame", () =>
-        {
-            StateHasChanged();
-            _isGameStart = true;
-            StateHasChanged();
-        });
-        _hubConnection.On("StartGame", () =>
-        {
-            _counter = GameDatabase.GameManager.GetCounter;
-            StateHasChanged();
-            StartCounter();
-        });
-
+        _hubConnection.On("RoundStart", () => { _screens = Screens.ROUND_START; StateHasChanged(); SetRoundStartCounter(); });
+        _hubConnection.On("StartGame", () => { _screens = Screens.GAME; StateHasChanged(); SetGameCounterElapsed(); });
         await _hubConnection.StartAsync();
     }
     #endregion
 
-    #region LOGIN
-    private void JoinLobby()
+    #region LOGIN LOBBY
+    private async Task Play()
     {
-        GameDatabase.AddPlayer(_player);
-        _player = GameDatabase.GetPlayer(_player.ID);
-        _isLogin = true;
-        StateHasChanged();
-        _hubConnection.InvokeAsync("JoinLobby", _player);
+        if (_lobbyID == null) await CreateLobby();
+        else await JoinLobby();
+    }
+    private async Task CreateLobby()
+    {
+        _lobby = GameDatabase.Lobbies.CreateLobby(_player);
+        _screens = Screens.LOBBY;
+
+        await _hubConnection.InvokeAsync("CreateLobby", _lobby.Admin.ID, _lobby.ID);
+    }
+    private async Task JoinLobby()
+    {
+        _lobby = GameDatabase.Lobbies.JoinLobby(_player, _lobbyID);
+        _screens = Screens.LOBBY;
+
+        await _hubConnection.InvokeAsync("JoinLobby", _player.ID, _lobbyID);
     }
     #endregion
 
     #region LOBBY
-    private void JoinTeam(Teams team)
+    private async Task ChangeTeam(Team newTeam, Team oldTeam)
     {
-        if (team == Teams.Team1) { _isJoinTeam1 = true; _isJoinTeam2 = false; }
-        else if (team == Teams.Team2) { _isJoinTeam2 = true; _isJoinTeam1 = false; }
-
-        _player.Team = team;
-        GameDatabase.GameManager.AddTeam(_player);
-        StateHasChanged();
-        _hubConnection.InvokeAsync("JoinTeam");
+        _player.ChangeTeam(newTeam, oldTeam);
+        if (newTeam == _lobby.Team1) { _showTeam1JoinBtn = false; _showTeam2JoinBtn = true; }
+        else { _showTeam2JoinBtn = false; _showTeam1JoinBtn = true; }
+        await _hubConnection.InvokeAsync("ChangeTeam", _lobby.ID);
     }
-
-    private void LobbyReady()
+    private async Task Ready(bool isReady)
     {
-        _player.IsLobbyReady = true;
-        if (GameDatabase.GameManager.PlayersIsLobbyReady())
-            _hubConnection.InvokeAsync("GenerateGame");
-    }
-
-    private void LobbyUnready() => _player.IsLobbyReady = false;
-    #endregion
-
-    #region GAME
-    private void NextRoundReady()
-    {
-        _player.IsNextRoundReady = true;
-        if (GameDatabase.GameManager.PlayersIsNextRoundReady())
+        if (isReady)
         {
-            GameDatabase.GameManager.SetIsRoundStart(true);
-            _hubConnection.InvokeAsync("StartGame");
+            _lobby.ReadyPlayers.Add(_player);
+            if (_lobby.CheckArePlayersReady())
+            {
+                _lobby.ClearReadyPlayers();
+                await RoundStart();
+            }
         }
-    }
+        else _lobby.ReadyPlayers.Remove(_player);
 
-    private void NextRoundUnready() => _player.IsNextRoundReady = false;
-
-    private void StartCounter()
-    {
-        _timer = new Timer(1000);
-        _timer.Elapsed += OnTimer;
-        _timer.Enabled = true;
-        _timer.Start();
-    }
-
-    private void OnTimer(object o, ElapsedEventArgs eventArgs)
-    {
-        _counter--;
-        InvokeAsync(() => StateHasChanged());
-
-        if (_counter <= 0)
-            _timer.Dispose();
-    }
-
-    private void TrueButton()
-    {
-        GameDatabase.GameManager.TrueButton();
+        _isReady = isReady;
         StateHasChanged();
-        _hubConnection.InvokeAsync("TrueButton");
     }
-
-    private void TabooButton()
+    private async Task RoundStart()
     {
-        GameDatabase.GameManager.TabooButton();
-        StateHasChanged();
-        _hubConnection.InvokeAsync("TabooButton");
+        _lobby.Game = new Models.Game(_lobby, 10, 5, 3, 3);
+        _lobby.Game.GenerateGame();
+        await _hubConnection.InvokeAsync("RoundStart", _lobby.ID);
     }
-
-    private void PassButton()
-    {
-        GameDatabase.GameManager.PassButton();
-        StateHasChanged();
-        _hubConnection.InvokeAsync("PassButton");
-    }
+    private async Task StartGame() => await _hubConnection.InvokeAsync("StartGame", _lobby.ID);
     #endregion
-}
 
+    Timer timer;
+    int roundStartCounter = 5;
+    private void SetRoundStartCounter()
+    {
+        timer = new Timer(1000);
+        timer.Elapsed += RoundStartCounterElapsed;
+        timer.Enabled = true;
+        timer.Start();
+    }
+
+    private void RoundStartCounterElapsed(object obj, ElapsedEventArgs elapsedEventArgs)
+    {
+        if (roundStartCounter <= 1)
+        {
+            timer.Dispose();
+            InvokeAsync(StartGame);
+        }
+        roundStartCounter--;
+        InvokeAsync(StateHasChanged);
+    }
+
+    int gameCounter = 8;
+    private void SetGameCounterElapsed()
+    {
+        timer = new Timer(1000);
+        timer.Elapsed += GameCounterElapsed;
+        timer.Enabled = true;
+        timer.Start();
+    }
+
+    private void GameCounterElapsed(object obj, ElapsedEventArgs elapsedEventArgs)
+    {
+        if (gameCounter <= 1)
+            timer.Dispose();
+
+        gameCounter--;
+        InvokeAsync(StateHasChanged);
+    }
+}
 
 
 

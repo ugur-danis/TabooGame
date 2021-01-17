@@ -1,70 +1,31 @@
-﻿using System.Threading.Tasks;
-using System.Timers;
-using Microsoft.AspNetCore.SignalR;
-using TabooGame.Data;
-using TabooGame.Models;
+﻿using Microsoft.AspNetCore.SignalR;
+using System.Threading.Tasks;
 
 namespace TabooGame.Hubs
 {
     public class GameHub : Hub
     {
-        private IHubCallerClients hubClients;
-
         public const string url = "/gameHub";
-        private const string lobbyName = "MainLobby";
-        private Timer timer;
-        private int counter;
-
 
         public override async Task OnConnectedAsync() =>
             await Clients.Caller.SendAsync("GetPlayerID", Context.ConnectionId);
 
-        #region LOBBY
-        public void JoinLobby(Player player)
+        #region LOGIN LOBBY
+        public async Task CreateLobby(string adminID, string lobbyName) => await Groups.AddToGroupAsync(adminID, lobbyName);
+        public async Task JoinLobby(string playerID, string lobbyName)
         {
-            Groups.AddToGroupAsync(player.ID, lobbyName);
-            Clients.OthersInGroup(lobbyName).SendAsync("JoinLobby");
+            await Groups.AddToGroupAsync(playerID, lobbyName);
+            await Clients.OthersInGroup(lobbyName).SendAsync("Refresh");
         }
-        public void JoinTeam() => Clients.OthersInGroup(lobbyName).SendAsync("Refresh");
+        #endregion
+
+        #region LOBBY
+        public async Task ChangeTeam(string lobbyID) => await Clients.OthersInGroup(lobbyID).SendAsync("Refresh");
+        public async Task RoundStart(string lobbyID) => await Clients.Group(lobbyID).SendAsync("RoundStart");
         #endregion
 
         #region GAME
-        public void GenerateGame()
-        {
-            GameDatabase.GameManager.GenerateGame();
-            if (hubClients != null)
-                hubClients.Group(lobbyName).SendAsync("GenerateGame");
-            else
-                Clients.Group(lobbyName).SendAsync("GenerateGame");
-        }
-        public void StartGame()
-        {
-            Clients.Group(lobbyName).SendAsync("StartGame");
-            StartCounter();
-        }
-        public void TrueButton() => Clients.OthersInGroup(lobbyName).SendAsync("Refresh");
-        public void TabooButton() => Clients.OthersInGroup(lobbyName).SendAsync("Refresh");
-        public void PassButton() => Clients.OthersInGroup(lobbyName).SendAsync("Refresh");
-        public void StartCounter()
-        {
-            hubClients = Clients;
-            counter = GameDatabase.GameManager.GetCounter;
-            timer = new Timer(1000);
-            timer.Elapsed += OnTimer;
-            timer.Enabled = true;
-            timer.Start();
-        }
-        private void OnTimer(object o, ElapsedEventArgs eventArgs)
-        {
-            counter--;
-
-            if (counter <= 0)
-            {
-                GameDatabase.GameManager.SetIsRoundStart(false);
-                GenerateGame();
-                timer.Dispose();
-            }
-        }
+        public async Task StartGame(string lobbyID) => await Clients.OthersInGroup(lobbyID).SendAsync("StartGame");
         #endregion
     }
 }

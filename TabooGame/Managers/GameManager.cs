@@ -11,20 +11,18 @@ namespace TabooGame.Managers
             SetWordCard(game);
         }
         private static void SetNextTeam(this Game game) =>
-            game.CurrentPlayingTeam = ++game.TeamQueue % 2 == 0 ? game.Lobby.Team2 : game.Lobby.Team1;
+            game.CurrentPlayingTeam = game.TeamQueue++ % 2 == 0 ? game.Lobby.Team1 : game.Lobby.Team2;
         private static void SetNextNarratorPlayer(this Game game)
         {
-            if (game.Team1PlayersQueue >= game.Lobby.Team1.Players.Count)
-                game.Team1PlayersQueue = 0;
-            if (game.Team2PlayersQueue >= game.Lobby.Team2.Players.Count)
-                game.Team2PlayersQueue = 0;
-
             game.CurrentNarratorPlayer =
                 game.CurrentPlayingTeam.Players
                 [
                     game.CurrentPlayingTeam == game.Lobby.Team1
                     ? game.Team1PlayersQueue++ : game.Team2PlayersQueue++
                 ];
+
+            if (game.Team1PlayersQueue >= game.Lobby.Team1.Players.Count) game.Team1PlayersQueue = 0;
+            if (game.Team2PlayersQueue >= game.Lobby.Team2.Players.Count) game.Team2PlayersQueue = 0;
         }
         private static void SetWordCard(this Game game) =>
             game.WordCard = new WordCard

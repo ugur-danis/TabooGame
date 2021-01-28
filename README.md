@@ -1,2 +1,2 @@
 # TabooGame
- Taboo Game With Blazor
+ Taboo Game With Blazor and SignalR

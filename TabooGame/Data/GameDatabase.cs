@@ -7,4 +7,9 @@ namespace TabooGame.Data
     {
         public static List<Lobby> Lobbies = new List<Lobby>();
     }
+
+    public static class GameConfig
+    {
+        public static int StartRoundStartCounter { get; } = 5;
+    }
 }

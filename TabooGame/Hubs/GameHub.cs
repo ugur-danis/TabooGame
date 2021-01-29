@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using TabooGame.Data;
 using TabooGame.Managers;
+using TabooGame.Models;
 
 namespace TabooGame.Hubs
 {

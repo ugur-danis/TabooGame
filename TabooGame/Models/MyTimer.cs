@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Timers;
 
-namespace TabooGame.Managers
+namespace TabooGame.Models
 {
     public class MyTimer
     {

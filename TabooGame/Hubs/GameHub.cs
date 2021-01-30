@@ -31,6 +31,32 @@ namespace TabooGame.Hubs
 
         #region LOBBY
         public async Task ChangeTeam(string lobbyID) => await Clients.OthersInGroup(lobbyID).SendAsync("Refresh");
+        public async Task LeaveLobby(string playerID, string lobbyID)
+        {
+            Lobby lobby = GameDatabase.Lobbies.Find(x => x.ID == lobbyID);
+
+            if (playerID == lobby.Admin.ID)
+                await ClosedLobby(lobby.ID);
+            else
+            {
+                lobby.Players.RemoveAll(x => x.ID == playerID);
+                lobby.Team1.Players.RemoveAll(x => x.ID == playerID);
+                lobby.Team2.Players.RemoveAll(x => x.ID == playerID);
+                await Groups.RemoveFromGroupAsync(playerID, lobby.ID);
+                await Clients.Caller.SendAsync("LeaveLobby");
+                await Clients.OthersInGroup(lobby.ID).SendAsync("Refresh");
+            }
+        }
+        public async Task ClosedLobby(string lobbyID)
+        {
+            Player[] players = GameDatabase.Lobbies.Find(x => x.ID == lobbyID).Players.ToArray();
+            GameDatabase.Lobbies.RemoveAll(x => x.ID == lobbyID);
+            await Clients.Group(lobbyID).SendAsync("LeaveLobby");
+            foreach (var player in players)
+            {
+                await Groups.RemoveFromGroupAsync(player.ID, lobbyID);
+            }
+        }
         #endregion
 
         #region Round Start

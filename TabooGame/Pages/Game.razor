@@ -14,7 +14,7 @@
     else if (_screens == Screens.LOBBY)
     {
         <div id="lobby">
-            <button id="back-btn" @onclick="GoToBack">GO TO BACK</button>
+            <button id="back-btn" @onclick="async () => await LeaveLobby()">GO TO BACK</button>
             <div id="lobby-settings">
                 <fieldset>
                     <legend>Game Options</legend>
@@ -321,9 +321,15 @@
         _hubConnection.On<string>("GetPlayerID", (string id) => _player.ID = id);
         _hubConnection.On("Refresh", () => StateHasChanged());
         _hubConnection.On("RoundStart", () => { _roundStartCounter = GameConfig.RoundStartCounter; SetScreen(Screens.ROUND_START); SetRoundStartCounter(); });
+        _hubConnection.On("LeaveLobby", () =>
+        {
+            _lobby = new Lobby(_player);
+            _showTeam1JoinBtn = true;
+            _showTeam2JoinBtn = true;
+            _isReady = false;
+            SetScreen(Screens.LOGIN);
+        });
         await _hubConnection.StartAsync();
-
-
     }
     #endregion
 
@@ -376,12 +382,7 @@
         _isReady = isReady;
         StateHasChanged();
     }
-    private void GoToBack()
-    {
-        _lobby = new Lobby(_player);
-        SetScreen(Screens.LOGIN);
-        StateHasChanged();
-    }
+    private async Task LeaveLobby() => await _hubConnection.InvokeAsync("LeaveLobby", _player.ID, _lobby.ID);
     #endregion
 
     #region ROUND START

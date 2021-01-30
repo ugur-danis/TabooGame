@@ -320,7 +320,12 @@
 
         _hubConnection.On<string>("GetPlayerID", (string id) => _player.ID = id);
         _hubConnection.On("Refresh", () => StateHasChanged());
-        _hubConnection.On("RoundStart", () => { _roundStartCounter = GameConfig.RoundStartCounter; SetScreen(Screens.ROUND_START); SetRoundStartCounter(); });
+        _hubConnection.On("RoundStart", () =>
+        {
+            _roundStartCounter = GameConfig.RoundStartCounter;
+            SetScreen(Screens.ROUND_START);
+            SetRoundStartCounter();
+        });
         _hubConnection.On("LeaveLobby", () =>
         {
             _lobby = new Lobby(_player);
@@ -333,7 +338,11 @@
     }
     #endregion
 
-    private void SetScreen(Screens screen) { _screens = screen; StateHasChanged(); }
+    private void SetScreen(Screens screen)
+    {
+        _screens = screen;
+        StateHasChanged();
+    }
 
     #region LOGIN LOBBY
     private async Task Play()

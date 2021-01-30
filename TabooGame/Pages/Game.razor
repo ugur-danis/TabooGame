@@ -21,40 +21,50 @@
                     <div class="lobby-setting">LOBBY ID @_lobby.ID</div>
                     <div class="lobby-setting">
                         <span>Number of win</span>
-                        <select>
-                            <option>10</option>
-                            <option selected>20</option>
-                            <option>30</option>
-                            <option>40</option>
-                            <option>50</option>
+                        <select @bind="_lobby.Game.NumberOfWin">
+                            @foreach (var value in GameConfig.SelectNumberOfWin)
+                            {
+                                if (value == GameConfig.SelectNumberOfWin[GameConfig.DefaultNumberOfWinIndex])
+                                {
+                                    <option value="@value" selected>@value</option>
+                                }
+                                else
+                                {
+                                    <option value="@value">@value</option>
+                                }
+                            }
                         </select>
                     </div>
                     <div class="lobby-setting">
                         <span>Remaining Pass</span>
-                        <select>
-                            <option>1</option>
-                            <option>2</option>
-                            <option selected>3</option>
-                        </select>
-                    </div>
-                    <div class="lobby-setting">
-                        <span>Remaining Taboo</span>
-                        <select>
-                            <option>1</option>
-                            <option>2</option>
-                            <option selected>3</option>
+                        <select @bind="_lobby.Game.RightToPass">
+                            @foreach (var value in GameConfig.SelectRightToPass)
+                            {
+                                if (value == GameConfig.SelectRightToPass[GameConfig.DefaultRightToPassIndex])
+                                {
+                                    <option value="@value" selected>@value</option>
+                                }
+                                else
+                                {
+                                    <option value="@value">@value</option>
+                                }
+                            }
                         </select>
                     </div>
                     <div class="lobby-setting">
                         <span>Time For Speaker</span>
-                        <select>
-                            <option>30s</option>
-                            <option>40s</option>
-                            <option>50s</option>
-                            <option selected>60s</option>
-                            <option>70s</option>
-                            <option>80s</option>
-                            <option>90s</option>
+                        <select @bind="_lobby.Game.Counter">
+                            @foreach (var value in GameConfig.SelectCounter)
+                            {
+                                if (value == GameConfig.SelectCounter[GameConfig.DefaultCounterIndex])
+                                {
+                                    <option value="@value" selected>@value</option>
+                                }
+                                else
+                                {
+                                    <option value="@value">@value</option>
+                                }
+                            }
                         </select>
                     </div>
                     @if (!_showTeam1JoinBtn || !_showTeam2JoinBtn) // Herhangi bir takım seçmiş ise
@@ -366,6 +376,7 @@
         _isReady = isReady;
         StateHasChanged();
     }
+    // TODO: Go to back method
     #endregion
 
     #region ROUND START
@@ -394,3 +405,7 @@
     }
     #endregion
 
+    #region WORD CARD CONTROLLER
+    // TODO: True,Taboo,Pass Buton işlevleri ve hubdan refresh gönder
+    #endregion
+}

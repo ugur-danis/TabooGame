@@ -8,7 +8,7 @@
         <div id="login">
             <input type="text" placeholder="Player Name" @bind="_player.Name">
             <input type="number" placeholder="Lobby ID" @bind="_lobby.ID">
-            <button @onclick="Play">PLAY</button>
+            <button @onclick="async () => await Play()">PLAY</button>
         </div>
     }
     else if (_screens == Screens.LOBBY)
@@ -71,11 +71,11 @@
                     {
                         @if (!_isReady)
                         {
-                            <button id="ready-btn" @onclick="() => CheckPlayersReady(true)">READY</button>
+                            <button id="ready-btn" @onclick=" async () => await CheckPlayersReady(true)">READY</button>
                         }
                         else
                         {
-                            <button id="ready-btn" @onclick="() => CheckPlayersReady(false)">UNREADY</button>
+                            <button id="ready-btn" @onclick="async () => await CheckPlayersReady(false)">UNREADY</button>
                         }
                     }
                     else
@@ -102,7 +102,7 @@
                         {
                             <tr>
                                 <td>
-                                    <button class="join-btn" @onclick="()=>ChangeTeam(_lobby.Team1,_lobby.Team2)">JOIN</button>
+                                    <button class="join-btn" @onclick="async () => await ChangeTeam(_lobby.Team1,_lobby.Team2)">JOIN</button>
                                 </td>
                             </tr>
                         }
@@ -150,7 +150,7 @@
                         {
                             <tr>
                                 <td>
-                                    <button class="join-btn" @onclick="()=>ChangeTeam(_lobby.Team2,_lobby.Team1)">JOIN</button>
+                                    <button class="join-btn" @onclick="async() => await ChangeTeam(_lobby.Team2,_lobby.Team1)">JOIN</button>
                                 </td>
                             </tr>
                         }

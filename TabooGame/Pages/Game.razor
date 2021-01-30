@@ -14,7 +14,7 @@
     else if (_screens == Screens.LOBBY)
     {
         <div id="lobby">
-            <button id="back-btn" @onclick="GoToBack">GO TO BACK</button>
+            <button id="back-btn" @onclick="()=>_screens = Screens.LOGIN">GO TO BACK</button>
             <div id="lobby-settings">
                 <fieldset>
                     <legend>Game Options</legend>
@@ -376,12 +376,7 @@
         _isReady = isReady;
         StateHasChanged();
     }
-    private void GoToBack()
-    {
-        _lobby = new Lobby(_player);
-        SetScreen(Screens.LOGIN);
-        StateHasChanged();
-    }
+    // TODO: Go to back method
     #endregion
 
     #region ROUND START

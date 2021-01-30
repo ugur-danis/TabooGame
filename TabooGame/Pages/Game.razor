@@ -309,8 +309,9 @@
 
         _hubConnection.On<string>("GetPlayerID", (string id) => _player.ID = id);
         _hubConnection.On("Refresh", () => StateHasChanged());
-        _hubConnection.On("RoundStart", () => { SetScreen(Screens.ROUND_START); SetRoundStartCounter(); });
+        _hubConnection.On("RoundStart", () => { _roundStartCounter = GameConfig.RoundStartCounter; SetScreen(Screens.ROUND_START); SetRoundStartCounter(); });
         await _hubConnection.StartAsync();
+
 
     }
     #endregion
@@ -370,7 +371,6 @@
     #region ROUND START
     private void SetRoundStartCounter()
     {
-        _roundStartCounter = GameConfig.StartRoundStartCounter;
         _timer = new MyTimer(1000, _roundStartCounter, () =>
         {
             _roundStartCounter = _timer.Counter;
@@ -393,7 +393,4 @@
         _timer.StartTimer();
     }
     #endregion
-}
-
-
 

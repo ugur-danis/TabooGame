@@ -1,23 +1,22 @@
 ﻿using System.Collections.Generic;
+using TabooGame.Data;
 
 namespace TabooGame.Models
 {
     public class Game
     {
-        public Game(Lobby lobby, int numberOfWin, int counter, int rightToTaboo, int rightToPass)
+        public Game(Lobby lobby)
         {
             Lobby = lobby;
-            NumberOfWin = numberOfWin;
-            Counter = counter;
-            RightToTaboo = rightToTaboo;
-            RightToPass = rightToPass;
+            NumberOfWin = GameConfig.SelectNumberOfWin[GameConfig.DefaultNumberOfWinIndex];
+            Counter = GameConfig.SelectCounter[GameConfig.DefaultCounterIndex];
+            RightToPass = GameConfig.SelectRightToPass[GameConfig.DefaultRightToPassIndex];
         }
 
         public Lobby Lobby { get; set; }
 
         public int NumberOfWin { get; set; }
         public int Counter { get; set; }
-        public int RightToTaboo { get; set; }
         public int RightToPass { get; set; }
 
         public int TeamQueue { get; set; }

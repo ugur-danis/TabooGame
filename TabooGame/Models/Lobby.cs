@@ -4,12 +4,12 @@ namespace TabooGame.Models
 {
     public class Lobby
     {
-        public Lobby(Player admin, string id)
+        public Lobby(Player admin)
         {
-            ID = id;
             Admin = admin;
             Team1 = new Team();
             Team2 = new Team();
+            Game = new Game(this);
             Players = new List<Player> { admin };
             ReadyPlayers = new List<Player>();
 

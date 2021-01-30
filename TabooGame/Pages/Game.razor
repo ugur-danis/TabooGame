@@ -7,7 +7,7 @@
     {
         <div id="login">
             <input type="text" placeholder="Player Name" @bind="_player.Name">
-            <input type="number" placeholder="Lobby ID" @bind="_lobbyID">
+            <input type="number" placeholder="Lobby ID" @bind="_lobby.ID">
             <button @onclick="Play">PLAY</button>
         </div>
     }
@@ -18,9 +18,7 @@
             <div id="lobby-settings">
                 <fieldset>
                     <legend>Game Options</legend>
-                    <div class="lobby-setting">
-                        LOBBY ID @_lobby.ID
-                    </div>
+                    <div class="lobby-setting">LOBBY ID @_lobby.ID</div>
                     <div class="lobby-setting">
                         <span>Number of win</span>
                         <select>
@@ -287,12 +285,11 @@
     private bool _showTeam2JoinBtn = true;
     private bool _isReady = false;
     #endregion
-    private Player _player = new Player();
+    private Player _player;
     private Lobby _lobby;
     private MyTimer _timer;
     private int _roundStartCounter = 0;
     private int _gameCounter = 0;
-    private string _lobbyID;
     #endregion
 
     #region Initialize
@@ -301,6 +298,10 @@
 
     protected override async Task OnInitializedAsync()
     {
+        // Set variables
+        _player = new Player();
+        _lobby = new Lobby(_player);
+
         string baseUrl = navigationManager.BaseUri;
         _hubUrl = baseUrl.TrimEnd('/') + GameHub.url;
         _hubConnection = new HubConnectionBuilder()
@@ -324,7 +325,7 @@
         //TODO: Doğrulama için class oluştur
         if (true)
         {
-            if (_lobbyID == null) await CreateLobby();
+            if (_lobby.ID == null || _lobby.ID == String.Empty) await CreateLobby();
             else await JoinLobby();
             SetScreen(Screens.LOBBY);
         }
@@ -336,8 +337,8 @@
     }
     private async Task JoinLobby()
     {
-        _lobby = GameDatabase.Lobbies.JoinLobby(_player, _lobbyID);
-        await _hubConnection.InvokeAsync("JoinLobby", _player.ID, _lobbyID);
+        _lobby = GameDatabase.Lobbies.JoinLobby(_player, _lobby.ID);
+        await _hubConnection.InvokeAsync("JoinLobby", _player.ID, _lobby.ID);
     }
     #endregion
 
@@ -357,8 +358,7 @@
             if (_lobby.CheckArePlayersReady())
             {
                 _lobby.ClearReadyPlayers();
-                _lobby.Game = new Models.Game(_lobby, 10, 5, 3, 3);
-                await _hubConnection.InvokeAsync("RoundStart", _lobby.ID);
+                await _hubConnection.InvokeAsync("RoundStart", _lobby.ID, _lobby.Game.Counter);
             }
         }
         else _lobby.ReadyPlayers.Remove(_player);

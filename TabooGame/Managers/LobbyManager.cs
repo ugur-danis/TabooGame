@@ -6,10 +6,8 @@ namespace TabooGame.Managers
 {
     public static class LobbyManager
     {
-        public static bool CheckArePlayersReady(this Lobby lobby) =>
-            lobby.ReadyPlayers.Count == lobby.Players.Count;
-        public static void ClearReadyPlayers(this Lobby lobby) =>
-            lobby.ReadyPlayers.Clear();
+        public static bool CheckArePlayersReady(this Lobby lobby) => lobby.ReadyPlayers.Count == lobby.Players.Count;
+        public static void ClearReadyPlayers(this Lobby lobby) => lobby.ReadyPlayers.Clear();
         public static Lobby CreateLobby(this List<Lobby> lobbies, Player admin)
         {
             System.Random random = new System.Random();
@@ -22,7 +20,7 @@ namespace TabooGame.Managers
 
             } while (lobbies.Any(x => x.ID == randomID));
 
-            lobbies.Add(new Lobby(admin, randomID));
+            lobbies.Add(new Lobby(admin) { ID = randomID });
             return lobbies.Find(x => x.ID == randomID);
         }
         public static Lobby JoinLobby(this List<Lobby> lobbies, Player player, string lobbyID)

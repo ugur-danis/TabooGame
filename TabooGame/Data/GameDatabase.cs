@@ -5,7 +5,7 @@ namespace TabooGame.Data
 {
     public static class GameDatabase
     {
-        public static List<Lobby> Lobbies = new List<Lobby>();
+        public static List<Lobby> Lobbies { get; } = new List<Lobby>();
     }
 
     public static class GameConfig

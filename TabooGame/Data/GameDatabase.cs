@@ -10,6 +10,5 @@ namespace TabooGame.Data
 
     public static class GameConfig
     {
-        public static int StartRoundStartCounter { get; } = 5;
     }
 }

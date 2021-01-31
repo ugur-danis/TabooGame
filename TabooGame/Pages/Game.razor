@@ -139,7 +139,7 @@
                     <thead>
                         <tr>
                             <th>PLAYERS</th>
-                            @if (_lobby.Admin == _player)
+                            @if (_player.ID == _lobby.Admin.ID)
                             {
                                 <th>ADMIN</th>
                             }
@@ -150,7 +150,7 @@
                         {
                             <tr>
                                 <td>@player.Name</td>
-                                @if (_lobby.Admin == _player)
+                                @if (_player.ID == _lobby.Admin.ID)
                                 {
                                     <td>
                                         <button id="kick-btn">KICK</button>

@@ -40,6 +40,7 @@ namespace TabooGame.Hubs
             lobby.Team2.Players.RemoveAll(x => x.ID == playerID);
             await Groups.RemoveFromGroupAsync(playerID, lobby.ID);
             await Clients.OthersInGroup(lobby.ID).SendAsync("LeaveLobby");
+            await Clients.Client(playerID).SendAsync("LeavingPlayer");
         }
         public async Task ClosedLobby(string lobbyID)
         {

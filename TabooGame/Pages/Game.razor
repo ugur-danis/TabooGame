@@ -353,6 +353,14 @@
             SetScreen(Screens.ROUND_START);
             SetRoundStartCounter();
         });
+        _hubConnection.On("LeavingPlayer", () =>
+        {
+            _lobby = new Lobby(_player);
+            _showTeam1JoinBtn = true;
+            _showTeam2JoinBtn = true;
+            _isReady = false;
+            SetScreen(Screens.LOGIN);
+        });
         _hubConnection.On("LeaveLobby", () =>
         {
             _isReady = false;
@@ -365,7 +373,6 @@
             _showTeam2JoinBtn = true;
             _isReady = false;
             SetScreen(Screens.LOGIN);
-            StateHasChanged();
         });
         await _hubConnection.StartAsync();
     }
@@ -430,15 +437,7 @@
         if (_player.ID == _lobby.Admin.ID)
             await _hubConnection.InvokeAsync("ClosedLobby", _lobby.ID);
         else
-        {
             await _hubConnection.InvokeAsync("LeaveLobby", _player.ID, _lobby.ID);
-
-            _lobby = new Lobby(_player);
-            _showTeam1JoinBtn = true;
-            _showTeam2JoinBtn = true;
-            _isReady = false;
-            SetScreen(Screens.LOGIN);
-        }
     }
     #endregion
 

@@ -51,6 +51,7 @@ namespace TabooGame.Hubs
                 await Groups.RemoveFromGroupAsync(player.ID, lobbyID);
             }
         }
+        public async Task UpdateGameSetting(string lobbyID) => await Clients.OthersInGroup(lobbyID).SendAsync("Refresh");
         #endregion
 
         #region Round Start

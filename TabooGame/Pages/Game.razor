@@ -29,7 +29,7 @@
                         <span>Number of win</span>
                         @if (_player.ID == _lobby.Admin.ID)
                         {
-                            <select @bind="_lobby.Game.NumberOfWin">
+                            <select @onchange="async (ChangeEventArgs args) => { _lobby.Game.NumberOfWin = Convert.ToInt32(args.Value); await UpdateGameSetting(); }">
                                 @foreach (var value in GameConfig.SelectNumberOfWin)
                                 {
                                     if (value == GameConfig.SelectNumberOfWin[GameConfig.DefaultNumberOfWinIndex])
@@ -43,7 +43,6 @@
                                 }
                             </select>
                         }
-
                         else
                         {
                             <span>@_lobby.Game.NumberOfWin</span>
@@ -53,7 +52,7 @@
                         <span>Remaining Pass</span>
                         @if (_player.ID == _lobby.Admin.ID)
                         {
-                            <select @bind="_lobby.Game.RightToPass">
+                            <select @onchange="async (ChangeEventArgs args) => { _lobby.Game.RightToPass = Convert.ToInt32(args.Value); await UpdateGameSetting(); }">
                                 @foreach (var value in GameConfig.SelectRightToPass)
                                 {
                                     if (value == GameConfig.SelectRightToPass[GameConfig.DefaultRightToPassIndex])
@@ -76,7 +75,7 @@
                         <span>Time For Speaker</span>
                         @if (_player.ID == _lobby.Admin.ID)
                         {
-                            <select @bind="_lobby.Game.Counter">
+                            <select @onchange="async (ChangeEventArgs args) => { _lobby.Game.Counter = Convert.ToInt32(args.Value); await UpdateGameSetting(); }">
                                 @foreach (var value in GameConfig.SelectCounter)
                                 {
                                     if (value == GameConfig.SelectCounter[GameConfig.DefaultCounterIndex])
@@ -90,12 +89,10 @@
                                 }
                             </select>
                         }
-
                         else
                         {
                             <span>@_lobby.Game.Counter s</span>
                         }
-
                     </div>
                     @if (!_showTeam1JoinBtn || !_showTeam2JoinBtn) // Herhangi bir takım seçmiş ise
                     {
@@ -404,6 +401,7 @@
     #endregion
 
     #region LOBBY
+    private async Task UpdateGameSetting() => await _hubConnection.InvokeAsync("UpdateGameSetting", _lobby.ID);
     private async Task ChangeTeam(Team newTeam, Team oldTeam)
     {
         _player.ChangeTeam(newTeam, oldTeam);

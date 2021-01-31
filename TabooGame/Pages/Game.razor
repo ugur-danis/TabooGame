@@ -18,10 +18,13 @@
             <div id="lobby-settings">
                 <fieldset>
                     <legend>Game Options</legend>
-                    <div class="lobby-setting">
-                        <span>LOBBY ID</span>
-                        <span>@_lobby.ID</span>
-                    </div>
+                    @if (_player.ID == _lobby.Admin.ID)
+                    {
+                        <div class="lobby-setting">
+                            <span>LOBBY ID</span>
+                            <span>@_lobby.ID</span>
+                        </div>
+                    }
                     <div class="lobby-setting">
                         <span>Number of win</span>
                         @if (_player.ID == _lobby.Admin.ID)

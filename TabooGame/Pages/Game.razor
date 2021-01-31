@@ -153,7 +153,7 @@
                                 @if (_player.ID == _lobby.Admin.ID)
                                 {
                                     <td>
-                                        <button id="kick-btn">KICK</button>
+                                        <button id="kick-btn" @onclick="async () => await KickPlayer(player.ID)">KICK</button>
                                     </td>
                                 }
                             </tr>
@@ -439,6 +439,7 @@
         else
             await _hubConnection.InvokeAsync("LeaveLobby", _player.ID, _lobby.ID);
     }
+    private async Task KickPlayer(string playerID) => await _hubConnection.InvokeAsync("LeaveLobby", playerID, _lobby.ID);
     #endregion
 
     #region ROUND START

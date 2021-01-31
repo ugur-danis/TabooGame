@@ -53,11 +53,11 @@ input[type="number"] {
 }
 
 select {
-  width: 100px;
-  padding: 4px;
-  cursor: pointer;
-  border: none;
-  color: var(--wrapper);
+    width: 130px;
+    padding: 4px;
+    cursor: pointer;
+    border: none;
+    color: var(--wrapper);
 }
 
 select:focus,
@@ -141,6 +141,10 @@ select:hover {
   font-size: 10pt;
 }
 
+.lobby-setting :last-child {
+    display: block !important;
+}
+
 #lobby-settings .lobby-setting span {
   display: inline-block;
   margin-bottom: 6px;
@@ -148,7 +152,7 @@ select:hover {
 
 #lobby-settings fieldset {
   display: flex;
-  justify-content: space-between;
+  justify-content: space-around;
   align-items: center;
   padding: 10px 20px;
   text-align: center;

@@ -18,54 +18,81 @@
             <div id="lobby-settings">
                 <fieldset>
                     <legend>Game Options</legend>
-                    <div class="lobby-setting">LOBBY ID @_lobby.ID</div>
+                    <div class="lobby-setting">
+                        <span>LOBBY ID</span>
+                        <span>@_lobby.ID</span>
+                    </div>
                     <div class="lobby-setting">
                         <span>Number of win</span>
-                        <select @bind="_lobby.Game.NumberOfWin">
-                            @foreach (var value in GameConfig.SelectNumberOfWin)
-                            {
-                                if (value == GameConfig.SelectNumberOfWin[GameConfig.DefaultNumberOfWinIndex])
+                        @if (_player.ID == _lobby.Admin.ID)
+                        {
+                            <select @bind="_lobby.Game.NumberOfWin">
+                                @foreach (var value in GameConfig.SelectNumberOfWin)
                                 {
-                                    <option value="@value" selected>@value</option>
+                                    if (value == GameConfig.SelectNumberOfWin[GameConfig.DefaultNumberOfWinIndex])
+                                    {
+                                        <option value="@value" selected>@value</option>
+                                    }
+                                    else
+                                    {
+                                        <option value="@value">@value</option>
+                                    }
                                 }
-                                else
-                                {
-                                    <option value="@value">@value</option>
-                                }
-                            }
-                        </select>
+                            </select>
+                        }
+
+                        else
+                        {
+                            <span>@_lobby.Game.NumberOfWin</span>
+                        }
                     </div>
                     <div class="lobby-setting">
                         <span>Remaining Pass</span>
-                        <select @bind="_lobby.Game.RightToPass">
-                            @foreach (var value in GameConfig.SelectRightToPass)
-                            {
-                                if (value == GameConfig.SelectRightToPass[GameConfig.DefaultRightToPassIndex])
+                        @if (_player.ID == _lobby.Admin.ID)
+                        {
+                            <select @bind="_lobby.Game.RightToPass">
+                                @foreach (var value in GameConfig.SelectRightToPass)
                                 {
-                                    <option value="@value" selected>@value</option>
+                                    if (value == GameConfig.SelectRightToPass[GameConfig.DefaultRightToPassIndex])
+                                    {
+                                        <option value="@value" selected>@value</option>
+                                    }
+                                    else
+                                    {
+                                        <option value="@value">@value</option>
+                                    }
                                 }
-                                else
-                                {
-                                    <option value="@value">@value</option>
-                                }
-                            }
-                        </select>
+                            </select>
+                        }
+                        else
+                        {
+                            <span>@_lobby.Game.RightToPass</span>
+                        }
                     </div>
                     <div class="lobby-setting">
                         <span>Time For Speaker</span>
-                        <select @bind="_lobby.Game.Counter">
-                            @foreach (var value in GameConfig.SelectCounter)
-                            {
-                                if (value == GameConfig.SelectCounter[GameConfig.DefaultCounterIndex])
+                        @if (_player.ID == _lobby.Admin.ID)
+                        {
+                            <select @bind="_lobby.Game.Counter">
+                                @foreach (var value in GameConfig.SelectCounter)
                                 {
-                                    <option value="@value" selected>@value</option>
+                                    if (value == GameConfig.SelectCounter[GameConfig.DefaultCounterIndex])
+                                    {
+                                        <option value="@value" selected>@value</option>
+                                    }
+                                    else
+                                    {
+                                        <option value="@value">@value</option>
+                                    }
                                 }
-                                else
-                                {
-                                    <option value="@value">@value</option>
-                                }
-                            }
-                        </select>
+                            </select>
+                        }
+
+                        else
+                        {
+                            <span>@_lobby.Game.Counter s</span>
+                        }
+
                     </div>
                     @if (!_showTeam1JoinBtn || !_showTeam2JoinBtn) // Herhangi bir takım seçmiş ise
                     {

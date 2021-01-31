@@ -328,11 +328,17 @@
         });
         _hubConnection.On("LeaveLobby", () =>
         {
+            _isReady = false;
+            StateHasChanged();
+        });
+        _hubConnection.On("ClosedLobby", () =>
+        {
             _lobby = new Lobby(_player);
             _showTeam1JoinBtn = true;
             _showTeam2JoinBtn = true;
             _isReady = false;
             SetScreen(Screens.LOGIN);
+            StateHasChanged();
         });
         await _hubConnection.StartAsync();
     }
@@ -391,7 +397,21 @@
         _isReady = isReady;
         StateHasChanged();
     }
-    private async Task LeaveLobby() => await _hubConnection.InvokeAsync("LeaveLobby", _player.ID, _lobby.ID);
+    private async Task LeaveLobby()
+    {
+        if (_player.ID == _lobby.Admin.ID)
+            await _hubConnection.InvokeAsync("ClosedLobby", _lobby.ID);
+        else
+        {
+            await _hubConnection.InvokeAsync("LeaveLobby", _player.ID, _lobby.ID);
+
+            _lobby = new Lobby(_player);
+            _showTeam1JoinBtn = true;
+            _showTeam2JoinBtn = true;
+            _isReady = false;
+            SetScreen(Screens.LOGIN);
+        }
+    }
     #endregion
 
     #region ROUND START

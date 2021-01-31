@@ -10,14 +10,14 @@ namespace TabooGame.Models
             Lobby = lobby;
             NumberOfWin = GameConfig.SelectNumberOfWin[GameConfig.DefaultNumberOfWinIndex];
             Counter = GameConfig.SelectCounter[GameConfig.DefaultCounterIndex];
-            RightToPass = GameConfig.SelectRightToPass[GameConfig.DefaultRightToPassIndex];
+            RemainingPass = GameConfig.SelectRightToPass[GameConfig.DefaultRightToPassIndex];
         }
 
         public Lobby Lobby { get; set; }
 
         public int NumberOfWin { get; set; }
         public int Counter { get; set; }
-        public int RightToPass { get; set; }
+        public int RemainingPass { get; set; }
 
         public int TeamQueue { get; set; }
         public int Team1PlayersQueue { get; set; }

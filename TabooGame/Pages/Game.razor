@@ -52,7 +52,7 @@
                         <span>Remaining Pass</span>
                         @if (_player.ID == _lobby.Admin.ID)
                         {
-                            <select @onchange="async (ChangeEventArgs args) => { _lobby.Game.RightToPass = Convert.ToInt32(args.Value); await UpdateGameSetting(); }">
+                            <select @onchange="async (ChangeEventArgs args) => { _lobby.Game.RemainingPass = Convert.ToInt32(args.Value); await UpdateGameSetting(); }">
                                 @foreach (var value in GameConfig.SelectRightToPass)
                                 {
                                     if (value == GameConfig.SelectRightToPass[GameConfig.DefaultRightToPassIndex])
@@ -68,7 +68,7 @@
                         }
                         else
                         {
-                            <span>@_lobby.Game.RightToPass</span>
+                            <span>@_lobby.Game.RemainingPass</span>
                         }
                     </div>
                     <div class="lobby-setting">
@@ -266,7 +266,6 @@
                     <div id="word-card-controller">
                         <button id="true-btn">TRUE</button>
                         <button id="taboo-btn">TABOO</button>
-                        <button id="pass-btn">PASS</button>
                     </div>
                 </div>
                 <table class="list-table">

@@ -24,20 +24,7 @@ namespace TabooGame.Managers
             if (game.Team1PlayersQueue >= game.Lobby.Team1.Players.Count) game.Team1PlayersQueue = 0;
             if (game.Team2PlayersQueue >= game.Lobby.Team2.Players.Count) game.Team2PlayersQueue = 0;
         }
-        private static void SetWordCard(this Game game) =>
-            game.WordCard = new WordCard
-            {
-                ID = 0,
-                Word = "Test",
-                ForbiddenWords = new System.Collections.Generic.List<string>
-                {
-                    "A",
-                    "B",
-                    "C",
-                    "D",
-                    "E"
-                }
-            };
+        private static void SetWordCard(this Game game) => game.WordCard = WordCardManager.GetRandomWordCard();
         public static void RightGuess(this Game game)
         {
             if (game.CurrentPlayingTeam == game.Lobby.Team1)

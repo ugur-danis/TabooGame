@@ -71,5 +71,6 @@ namespace TabooGame.Data
         public static int DefaultNumberOfWinIndex { get; } = 0;
         public static int DefaultCounterIndex { get; } = 3;
         public static int DefaultRightToPassIndex { get; } = 2;
+        public static int WordCardsCount { get; } = GameDatabase.WordCards.Count;
     }
 }

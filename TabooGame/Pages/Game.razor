@@ -249,26 +249,34 @@
                         }
                     </tbody>
                 </table>
-                <div id="word-card">
-                    <div id="word-card-header">
-                        <div id="word">
-                            @_lobby.Game.WordCard.Word
+                @if (_player.ID == _lobby.Game.CurrentNarratorPlayer.ID || !_lobby.Game.CurrentPlayingTeam.Players.Contains(_player))
+                {
+                    <div id="word-card">
+                        <div id="word-card-header">
+                            <div id="word">
+                                @_lobby.Game.WordCard.Word
+                            </div>
                         </div>
+
+                        <div id="word-card-body">
+                            <ul>
+                                @foreach (var forbiddenWord in @_lobby.Game.WordCard.ForbiddenWords)
+                                {
+                                    <li>@forbiddenWord</li>
+                                }
+                            </ul>
+                        </div>
+
+                        @if (!_lobby.Game.CurrentPlayingTeam.Players.Contains(_player))
+                        {
+                            <div id="word-card-controller">
+                                <button id="true-btn">TRUE</button>
+                                <button id="taboo-btn">TABOO</button>
+                                <button id="pass-btn">PASS @_lobby.Game.RemainingPass</button>
+                            </div>
+                        }
                     </div>
-                    <div id="word-card-body">
-                        <ul>
-                            @foreach (var forbiddenWord in @_lobby.Game.WordCard.ForbiddenWords)
-                            {
-                                <li>@forbiddenWord</li>
-                            }
-                        </ul>
-                    </div>
-                    <div id="word-card-controller">
-                        <button id="true-btn">TRUE</button>
-                        <button id="taboo-btn">TABOO</button>
-                        <button id="pass-btn">PASS @_lobby.Game.RemainingPass</button>
-                    </div>
-                </div>
+                }
                 <table class="list-table">
                     <thead>
                         <tr>
@@ -470,7 +478,6 @@
 
     #region TASK LIST
     // TODO: True,Taboo,Pass Buton işlevleri ve hubdan refresh gönder
-    // TODO: Word card controller sadece rakip oyuncularda render et
     // TODO: Validate class oluştur login ekranında, yeni bir lobi oluştururken ve lobiye giriş yaparken kontrol et.
     #endregion
 }

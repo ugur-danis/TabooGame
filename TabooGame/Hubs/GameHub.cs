@@ -76,5 +76,9 @@ namespace TabooGame.Hubs
             _timer.StartTimer();
         }
         #endregion
+
+        #region WORD CARD CONTROLLER
+        public async Task NewWord(string lobbyID) => await Clients.Group(lobbyID).SendAsync("Refresh");
+        #endregion
     }
 }

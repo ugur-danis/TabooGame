@@ -270,9 +270,9 @@
                         @if (!_lobby.Game.CurrentPlayingTeam.Players.Contains(_player))
                         {
                             <div id="word-card-controller">
-                                <button id="true-btn">TRUE</button>
-                                <button id="taboo-btn">TABOO</button>
-                                <button id="pass-btn">PASS @_lobby.Game.RemainingPass</button>
+                                <button id="true-btn" @onclick="async () => await RightGuessButton()">TRUE</button>
+                                <button id="taboo-btn" @onclick="async () => await TabooButton()">TABOO</button>
+                                <button id="pass-btn" @onclick="async () => await SkipWordButton()">PASS @_lobby.Game.RemainingPass</button>
                             </div>
                         }
                     </div>
@@ -476,8 +476,26 @@
     }
     #endregion
 
+    #region WORD CARD CONTROLLER
+    private async Task RightGuessButton()
+    {
+        _lobby.Game.RightGuess();
+        await NewWord();
+    }
+    private async Task TabooButton()
+    {
+        _lobby.Game.TabooWord();
+        await NewWord();
+    }
+    private async Task SkipWordButton()
+    {
+        _lobby.Game.SkipWord();
+        await NewWord();
+    }
+    private async Task NewWord() => await _hubConnection.InvokeAsync("NewWord", _lobby.ID);
+    #endregion
+
     #region TASK LIST
-    // TODO: True,Taboo,Pass Buton işlevleri ve hubdan refresh gönder
     // TODO: Validate class oluştur login ekranında, yeni bir lobi oluştururken ve lobiye giriş yaparken kontrol et.
     #endregion
 }

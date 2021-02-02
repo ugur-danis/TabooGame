@@ -11,6 +11,7 @@ namespace TabooGame.Models
             NumberOfWin = GameConfig.SelectNumberOfWin[GameConfig.DefaultNumberOfWinIndex];
             Counter = GameConfig.SelectCounter[GameConfig.DefaultCounterIndex];
             RemainingPass = GameConfig.SelectRightToPass[GameConfig.DefaultRightToPassIndex];
+            PastWordCards = new List<WordCard>();
         }
 
         public Lobby Lobby { get; set; }

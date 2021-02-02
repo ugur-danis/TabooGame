@@ -33,7 +33,7 @@ namespace TabooGame.Managers
                 game.Team2Score++;
             SetWordCard(game);
         }
-        public static void ForbiddenWord(this Game game)
+        public static void TabooWord(this Game game)
         {
             if (game.CurrentPlayingTeam == game.Lobby.Team1)
                 game.Team1Score--;

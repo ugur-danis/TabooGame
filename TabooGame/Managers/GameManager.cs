@@ -1,4 +1,5 @@
-﻿using TabooGame.Models;
+﻿using TabooGame.Data;
+using TabooGame.Models;
 
 namespace TabooGame.Managers
 {
@@ -24,7 +25,18 @@ namespace TabooGame.Managers
             if (game.Team1PlayersQueue >= game.Lobby.Team1.Players.Count) game.Team1PlayersQueue = 0;
             if (game.Team2PlayersQueue >= game.Lobby.Team2.Players.Count) game.Team2PlayersQueue = 0;
         }
-        private static void SetWordCard(this Game game) => game.WordCard = WordCardManager.GetRandomWordCard();
+        private static void SetWordCard(this Game game)
+        {
+            if (game.PastWordCards.Count == GameConfig.WordCardsCount)
+                game.PastWordCards.Clear();
+            do
+            {
+                game.WordCard = WordCardManager.GetRandomWordCard();
+            }
+            while (game.PastWordCards.Contains(game.WordCard));
+
+            game.PastWordCards.Add(game.WordCard);
+        }
         public static void RightGuess(this Game game)
         {
             if (game.CurrentPlayingTeam == game.Lobby.Team1)

@@ -54,5 +54,6 @@ namespace TabooGame.Managers
             SetWordCard(game);
         }
         public static void SkipWord(this Game game) => SetWordCard(game);
+        public static bool WinnerCheck(this Game game) => game.Team1Score >= game.NumberOfWin || game.Team2Score >= game.NumberOfWin;
     }
 }

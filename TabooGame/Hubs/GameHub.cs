@@ -58,9 +58,19 @@ namespace TabooGame.Hubs
         #region Round Start
         public async Task RoundStart(string lobbyID, int counter)
         {
-            GameDatabase.Lobbies.Find(x => x.ID == lobbyID).Game.GenerateGame();
-            await _clients.Group(lobbyID).SendAsync("RoundStart");
-            StartRoundStartCounter(lobbyID, counter);
+            Game game = GameDatabase.Lobbies.Find(x => x.ID == lobbyID).Game;
+            if (game.WinnerCheck())
+            {
+                game.ResetGame();
+                await _clients.Group(lobbyID).SendAsync("GameOver");
+            }
+            else
+            {
+                game.GenerateGame();
+                await _clients.Group(lobbyID).SendAsync("RoundStart");
+                StartRoundStartCounter(lobbyID, counter);
+            }
+
         }
         private void StartRoundStartCounter(string lobbyID, int counter)
         {

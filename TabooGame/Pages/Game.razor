@@ -276,7 +276,14 @@
                             <div id="word-card-controller">
                                 <button id="true-btn" @onclick="async () => await RightGuessButton()">TRUE</button>
                                 <button id="taboo-btn" @onclick="async () => await TabooButton()">TABOO</button>
-                                <button id="pass-btn" @onclick="async () => await SkipWordButton()">PASS @_lobby.Game.RemainingPass</button>
+                                @if (_lobby.Game.RemainingRightToPass >= 1)
+                                {
+                                    <button id="pass-btn" @onclick="async () => await SkipWordButton()">PASS @_lobby.Game.RemainingRightToPass</button>
+                                }
+                                else
+                                {
+                                    <button id="pass-btn" disabled>PASS @_lobby.Game.RemainingRightToPass</button>
+                                }
                             </div>
                         }
                     </div>
@@ -519,6 +526,5 @@
 
     #region TASK LIST
     // TODO: Validate class oluştur login ekranında, yeni bir lobi oluştururken ve lobiye giriş yaparken kontrol et.
-    // TODO: Pass hakkını kullanıldığında azalt ve bitip bitmediğini kontrol et.
     #endregion
 }

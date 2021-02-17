@@ -10,6 +10,7 @@ namespace TabooGame.Managers
             SetNextTeam(game);
             SetNextNarratorPlayer(game);
             SetWordCard(game);
+            game.RemainingRightToPass = game.RemainingPass;
         }
         private static void SetNextTeam(this Game game) =>
             game.CurrentPlayingTeam = game.TeamQueue++ % 2 == 0 ? game.Lobby.Team1 : game.Lobby.Team2;
@@ -53,7 +54,12 @@ namespace TabooGame.Managers
                 game.Team2Score--;
             SetWordCard(game);
         }
-        public static void SkipWord(this Game game) => SetWordCard(game);
+        public static void SkipWord(this Game game)
+        {
+            if (game.RemainingRightToPass < 1) return;
+            SetWordCard(game);
+            game.RemainingRightToPass--;
+        }
         public static bool WinnerCheck(this Game game) => game.Team1Score >= game.NumberOfWin || game.Team2Score >= game.NumberOfWin;
         public static void ResetGame(this Game game)
         {

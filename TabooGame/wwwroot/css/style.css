@@ -245,6 +245,16 @@ th {
   padding: 40px 80px;
 }
 
+/*Round start screen start game button*/
+#round-start button {
+    width: 200px;
+    padding: 16px 0;
+    border-radius: 8px;
+    font-size: 14pt;
+    color: white;
+    background-color: var(--table-list-background);
+}
+
 #scoreboard {
   width: 100%;
   padding: 10px 20px;

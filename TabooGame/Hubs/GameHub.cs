@@ -56,7 +56,7 @@ namespace TabooGame.Hubs
         #endregion
 
         #region Round Start
-        public async Task RoundStart(string lobbyID, int counter)
+        public async Task RoundStart(string lobbyID/*, int counter*/)
         {
             Game game = GameDatabase.Lobbies.Find(x => x.ID == lobbyID).Game;
             if (game.WinnerCheck())
@@ -68,21 +68,26 @@ namespace TabooGame.Hubs
             {
                 game.GenerateGame();
                 await _clients.Group(lobbyID).SendAsync("RoundStart");
-                StartRoundStartCounter(lobbyID, counter);
+                //StartRoundStartCounter(lobbyID, counter);
             }
 
         }
-        private void StartRoundStartCounter(string lobbyID, int counter)
-        {
-            _timer = new MyTimer(1000, GameConfig.RoundStartCounter, null, () => StartGameCounter(lobbyID, counter));
-            _timer.StartTimer();
-        }
+        //private void StartRoundStartCounter(string lobbyID, int counter)
+        //{
+        //    _timer = new MyTimer(1000, GameConfig.RoundStartCounter, null, () => StartGameCounter(lobbyID, counter));
+        //    _timer.StartTimer();
+        //}
         #endregion
 
         #region GAME
+        public async Task StartRound(string lobbyID, int counter)
+        {
+            await _clients.Group(lobbyID).SendAsync("StartRound");
+            StartGameCounter(lobbyID, counter);
+        }
         private void StartGameCounter(string lobbyId, int counter)
         {
-            _timer = new MyTimer(1000, counter, null, async () => await _self.RoundStart(lobbyId, counter));
+            _timer = new MyTimer(1000, counter, null, async () => await _self.RoundStart(lobbyId/*, counter*/));
             _timer.StartTimer();
         }
         #endregion

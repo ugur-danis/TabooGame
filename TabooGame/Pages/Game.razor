@@ -206,9 +206,13 @@
             <div class="next-round-info">
                 <div>Next Round Team: @_lobby.Game.CurrentPlayingTeam.Name</div>
                 <div>Next Round Narrator Player: @_lobby.Game.CurrentNarratorPlayer.Name</div>
-                <div id="round-start-counter">
-                    Round starts in @_roundStartCounter second
-                </div>
+                @if (_lobby.Admin.ID == _player.ID)
+                {
+                    <button @onclick="StartRound">Start Round</button>
+                }
+                @*<div id="round-start-counter">
+                        Round starts in @_roundStartCounter second
+                    </div>*@
             </div>
         </div>
 
@@ -358,9 +362,13 @@
         _hubConnection.On("Refresh", () => StateHasChanged());
         _hubConnection.On("RoundStart", () =>
         {
-            _roundStartCounter = GameConfig.RoundStartCounter;
             SetScreen(Screens.ROUND_START);
-            SetRoundStartCounter();
+        //_roundStartCounter = GameConfig.RoundStartCounter;
+        //SetRoundStartCounter();
+    });
+        _hubConnection.On("StartRound", () =>
+        {
+            StartGame();
         });
         _hubConnection.On("LeavingPlayer", () =>
         {
@@ -438,7 +446,7 @@
             if (_lobby.CheckArePlayersReady())
             {
                 _lobby.ClearReadyPlayers();
-                await _hubConnection.InvokeAsync("RoundStart", _lobby.ID, _lobby.Game.Counter);
+                await _hubConnection.InvokeAsync("RoundStart", _lobby.ID/*, _lobby.Game.Counter*/);
             }
         }
         else _lobby.ReadyPlayers.Remove(_player);
@@ -457,19 +465,27 @@
     #endregion
 
     #region ROUND START
-    private void SetRoundStartCounter()
+    //private void SetRoundStartCounter()
+    //{
+    //    _timer = new MyTimer(1000, _roundStartCounter, () =>
+    //    {
+    //        _roundStartCounter = _timer.Counter;
+    //        InvokeAsync(StateHasChanged);
+    //    }, StartGame);
+    //    _timer.StartTimer();
+    //}
+    private async Task StartRound() // Buton için
     {
-        _timer = new MyTimer(1000, _roundStartCounter, () =>
-        {
-            _roundStartCounter = _timer.Counter;
-            InvokeAsync(StateHasChanged);
-        }, StartGame);
-        _timer.StartTimer();
+        await _hubConnection.InvokeAsync("StartRound", _lobby.ID, _lobby.Game.Counter);
     }
     #endregion
 
     #region GAME
-    private void StartGame() { InvokeAsync(() => SetScreen(Screens.GAME)); SetGameCounter(); }
+    private void StartGame()
+    {
+        SetGameCounter();
+        InvokeAsync(() => SetScreen(Screens.GAME));
+    }
     private void SetGameCounter()
     {
         _gameCounter = _lobby.Game.Counter;

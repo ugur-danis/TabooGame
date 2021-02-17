@@ -19,6 +19,7 @@ namespace TabooGame.Models
         public int NumberOfWin { get; set; }
         public int Counter { get; set; }
         public int RemainingPass { get; set; }
+        public int RemainingRightToPass { get; set; }
 
         public int TeamQueue { get; set; }
         public int Team1PlayersQueue { get; set; }

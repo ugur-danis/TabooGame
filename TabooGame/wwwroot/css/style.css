@@ -247,6 +247,7 @@ th {
 
 /*Round start screen start game button*/
 #round-start button {
+    margin-top: 24px;
     width: 200px;
     padding: 16px 0;
     border-radius: 8px;

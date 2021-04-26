@@ -6,27 +6,27 @@
     @if (_screens == Screens.LOGIN)
     {
         <div id="login">
-            <input type="text" placeholder="Player Name" @bind="_player.Name">
-            <input type="number" placeholder="Lobby ID" @bind="_lobby.ID">
-            <button @onclick="async () => await Play()">PLAY</button>
+            <input type="text" placeholder="Oyuncu Adı" @bind="_player.Name">
+            <input type="number" placeholder="Lobi No" @bind="_lobby.ID">
+            <button @onclick="async () => await Play()">Oyna</button>
         </div>
     }
     else if (_screens == Screens.LOBBY)
     {
         <div id="lobby">
-            <button id="back-btn" @onclick="async () => await LeaveLobby()">GO TO BACK</button>
+            <button id="back-btn" @onclick="async () => await LeaveLobby()">GERİ DÖN</button>
             <div id="lobby-settings">
                 <fieldset>
-                    <legend>Game Options</legend>
+                    <legend>Oyun Ayarları</legend>
                     @if (_player.ID == _lobby.Admin.ID)
                     {
                         <div class="lobby-setting">
-                            <span>LOBBY ID</span>
+                            <span>Lobi No</span>
                             <span>@_lobby.ID</span>
                         </div>
                     }
                     <div class="lobby-setting">
-                        <span>Number of win</span>
+                        <span>Kazanma sayısı</span>
                         @if (_player.ID == _lobby.Admin.ID)
                         {
                             <select @onchange="async (ChangeEventArgs args) => { _lobby.Game.NumberOfWin = Convert.ToInt32(args.Value); await UpdateGameSetting(); }">
@@ -49,7 +49,7 @@
                         }
                     </div>
                     <div class="lobby-setting">
-                        <span>Remaining Pass</span>
+                        <span>Kelime Atlama Hakkı</span>
                         @if (_player.ID == _lobby.Admin.ID)
                         {
                             <select @onchange="async (ChangeEventArgs args) => { _lobby.Game.RemainingPass = Convert.ToInt32(args.Value); await UpdateGameSetting(); }">
@@ -72,7 +72,7 @@
                         }
                     </div>
                     <div class="lobby-setting">
-                        <span>Time For Speaker</span>
+                        <span>Anlatma süresi</span>
                         @if (_player.ID == _lobby.Admin.ID)
                         {
                             <select @onchange="async (ChangeEventArgs args) => { _lobby.Game.Counter = Convert.ToInt32(args.Value); await UpdateGameSetting(); }">
@@ -98,16 +98,16 @@
                     {
                         @if (!_isReady)
                         {
-                            <button id="ready-btn" @onclick=" async () => await CheckPlayersReady(true)">READY</button>
+                            <button id="ready-btn" @onclick=" async () => await CheckPlayersReady(true)">HAZIR</button>
                         }
                         else
                         {
-                            <button id="ready-btn" @onclick="async () => await CheckPlayersReady(false)">UNREADY</button>
+                            <button id="ready-btn" @onclick="async () => await CheckPlayersReady(false)">HAZIR DEĞİLİM</button>
                         }
                     }
                     else
                     {
-                        <button id="ready-btn" disabled>READY</button>
+                        <button id="ready-btn" disabled>HAZIR</button>
                     }
                 </fieldset>
             </div>
@@ -129,7 +129,7 @@
                         {
                             <tr>
                                 <td>
-                                    <button class="join-btn" @onclick="async () => await ChangeTeam(_lobby.Team1,_lobby.Team2)">JOIN</button>
+                                    <button class="join-btn" @onclick="async () => await ChangeTeam(_lobby.Team1,_lobby.Team2)">KATIL</button>
                                 </td>
                             </tr>
                         }
@@ -138,10 +138,10 @@
                 <table class="list-table">
                     <thead>
                         <tr>
-                            <th>PLAYERS</th>
+                            <th>OYUNCULAR</th>
                             @if (_player.ID == _lobby.Admin.ID)
                             {
-                                <th>ADMIN</th>
+                                <th>YÖNETİCİ</th>
                             }
                         </tr>
                     </thead>
@@ -153,7 +153,7 @@
                                 @if (_player.ID == _lobby.Admin.ID)
                                 {
                                     <td>
-                                        <button id="kick-btn" @onclick="async () => await KickPlayer(player.ID)">KICK</button>
+                                        <button id="kick-btn" @onclick="async () => await KickPlayer(player.ID)">AT</button>
                                     </td>
                                 }
                             </tr>
@@ -177,7 +177,7 @@
                         {
                             <tr>
                                 <td>
-                                    <button class="join-btn" @onclick="async() => await ChangeTeam(_lobby.Team2,_lobby.Team1)">JOIN</button>
+                                    <button class="join-btn" @onclick="async() => await ChangeTeam(_lobby.Team2,_lobby.Team1)">KATIL</button>
                                 </td>
                             </tr>
                         }
@@ -200,15 +200,15 @@
                     <span>@_lobby.Game.Team2Score</span>
                 </div>
                 <div class="number-of-win">
-                    Number Of Win: @_lobby.Game.NumberOfWin
+                    Kazanma Sayısı: @_lobby.Game.NumberOfWin
                 </div>
             </div>
             <div class="next-round-info">
-                <div>Next Round Team: @_lobby.Game.CurrentPlayingTeam.Name</div>
-                <div>Next Round Narrator Player: @_lobby.Game.CurrentNarratorPlayer.Name</div>
+                <div>Sıradaki Takım: @_lobby.Game.CurrentPlayingTeam.Name</div>
+                <div>Sıradaki Anlatıcı Oyuncu: @_lobby.Game.CurrentNarratorPlayer.Name</div>
                 @if (_lobby.Admin.ID == _player.ID)
                 {
-                    <button @onclick="StartRound">Start Round</button>
+                    <button @onclick="StartRound">Raundu Başlat</button>
                 }
                 @*<div id="round-start-counter">
                         Round starts in @_roundStartCounter second
@@ -232,9 +232,9 @@
                         <span>@_lobby.Game.Team2Score</span>
                     </div>
                     <div class="number-of-win">
-                        Number Of Win: @_lobby.Game.NumberOfWin
+                        Kazanma Sayısı: @_lobby.Game.NumberOfWin
                     </div>
-                    <div id="counter">Time: @_gameCounter</div>
+                    <div id="counter">Süre: @_gameCounter</div>
                 </div>
             </div>
             <div id="game-body">
@@ -274,11 +274,11 @@
                         @if (!_lobby.Game.CurrentPlayingTeam.Players.Contains(_player))
                         {
                             <div id="word-card-controller">
-                                <button id="true-btn" @onclick="async () => await RightGuessButton()">TRUE</button>
-                                <button id="taboo-btn" @onclick="async () => await TabooButton()">TABOO</button>
+                                <button id="true-btn" @onclick="async () => await RightGuessButton()">DOĞRU</button>
+                                <button id="taboo-btn" @onclick="async () => await TabooButton()">TABU</button>
                                 @if (_lobby.Game.RemainingRightToPass >= 1)
                                 {
-                                    <button id="pass-btn" @onclick="async () => await SkipWordButton()">PASS @_lobby.Game.RemainingRightToPass</button>
+                                    <button id="pass-btn" @onclick="async () => await SkipWordButton()">GEÇ @_lobby.Game.RemainingRightToPass</button>
                                 }
                                 else
                                 {
@@ -320,15 +320,15 @@
                     <span>@_lobby.Game.Team2Score</span>
                 </div>
                 <div class="number-of-win">
-                    Number Of Win: @_lobby.Game.NumberOfWin
+                    Kazanma Sayısı: @_lobby.Game.NumberOfWin
                 </div>
             </div>
             <div class="winner-info">
                 <div>
-                    Winner Team: @_lobby.Game.CurrentPlayingTeam.Name
+                    Kazanan Takım: @_lobby.Game.CurrentPlayingTeam.Name
                 </div>
             </div>
-            <button @onclick="()=>_screens = Screens.LOBBY">GO TO LOBBY</button>
+            <button @onclick="()=>_screens = Screens.LOBBY">Lobiye Dön</button>
         </div>
     }
 </div>

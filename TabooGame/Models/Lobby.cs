@@ -13,8 +13,8 @@ namespace TabooGame.Models
             Players = new List<Player> { admin };
             ReadyPlayers = new List<Player>();
 
-            Team1.Name = "TEAM 1";
-            Team2.Name = "TEAM 2";
+            Team1.Name = "TAKIM 1";
+            Team2.Name = "TAKIM 2";
         }
         public string ID { get; set; }
         public Player Admin { get; set; }
